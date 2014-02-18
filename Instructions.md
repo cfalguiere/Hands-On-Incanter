@@ -290,7 +290,7 @@ Et la time-series-plot ?
 
 Et bien toujours pas car la date n'est pas un timestamp numérique
 
-## 2.3 Les timestamps
+## 2.3 Calculer les timestamps
 
 Nous allons utilier clj-time qui est un wrapper sur Joda Time
 
@@ -335,5 +335,16 @@ C'est un peu plus intéressant avec plus de données.
 
 <pre><code>user=> (view (convert-to-dataset "../logs/TIME_MONITOR_2013-12-20.log"))
 </code></pre>
+
+
+# 3 Des charts améliorés
+
+Un ensemble de fonctions de chart avec un paramétrage des titres, des couleurs vous sont fournies dans elements/perf-charts.txt. Placez ces fonctions dans un module charts dans le projet hoincanter. Adaptez les fonctions si besoin et traduisez les titres en français.
+
+Ensuite depuis le REPL, essayez chacune des fonctions sur les relevés dont le temps est supérieur à 40 ms.
+
+user=> (def ds (convert-to-dataset "../logs/TIME_MONITOR_2013-12-20.log"))
+user=> (def dslong  ($where {:duration {:gt 40}} ds))
+
 
 
