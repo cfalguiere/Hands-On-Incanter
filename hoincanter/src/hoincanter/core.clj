@@ -6,7 +6,6 @@
   (:require [clj-time.format :as format] )
   (:require [clojure.java.io :as io]) )
 
-(defn q [p serie] (quantile serie :probs [p])) 
 
 (def time-pattern #"^([0-9- :,]*) INFO.*TIME MONITOR.*;(.*);(.*) ms$")
 
@@ -20,11 +19,6 @@
 (def custom-formatter (format/formatter "yyyy-MM-dd HH:mm:ss,SSS"))
 
 ;; implement functions
-
-;(defn build-reading
-;  "re-seq returns a vector consisting of the line and each group. This function filters out the line and converts duration into a long"
-;  [[s t l d]]
-;  [t l (str-to-long d)  ] )
 
 (defn str-to-ts
   "convert a string into a numeric timestamp"
@@ -57,12 +51,6 @@
   (let [parser (partial (partial parse-line time-pattern)  build-reading) ]
     (parse-file filename parser)))
 
-;(defn readings-to-dataset
-;  "build a dataset from a list of readings"
-;  [readings]
-;  {:pre [(seq? readings)] } 
-;  (dataset [:timestamp :servicename :duration] readings))
-
 (defn readings-to-dataset
   "build a dataset from a list of readings"
   [readings]
@@ -75,6 +63,4 @@
   {:pre  [(string? filename)] } 
   (readings-to-dataset (extract-data filename)))
 
-
-;; step 3
 

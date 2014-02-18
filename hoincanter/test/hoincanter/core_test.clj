@@ -2,18 +2,10 @@
   (:use [midje.sweet])
   (:use [incanter.core :only [$]])
   (:require [clojure.test :refer :all]
-            [hoincanter.core :refer :all])
-  (:use clojure.contrib.generic.math-functions))
-	   
-(fact "quantile 0 equals min of the list"
-      (round (first (q 0 [3 2 1]))) => 1 )
-
+            [hoincanter.core :refer :all]))
+	     
 (fact "it should convert a string into a long"
       (str-to-long "123456789") => 123456789)
-
-;(fact "it should return a vector consisting in 3 last groups"
-;      ( build-reading [ "Full line text" "2013-12-13 08:00:00,924" "RS_OW_AgencyDataSupplierService" "208"])
-;	=> ["2013-12-13 08:00:00,924" "RS_OW_AgencyDataSupplierService" 208])
 
 (fact "it should return a vector consisting in 3 last groups and time stamp"
       ( build-reading [ "Full line text" "2013-12-13 08:00:00,924" "RS_OW_AgencyDataSupplierService" "208"])
@@ -41,7 +33,7 @@
       (first ($ :duration
 		(readings-to-dataset (lazy-seq [["ts1" "l1" 42 1234]["ts2" "l2" 5 3456]]) )
 		)) => 42)
-; step3
+
 (fact "it should return a dataset which has 42 as duration on first line"
       (first ($ :ts
 		(readings-to-dataset (lazy-seq [["ts1" "l1" 42 1234]["ts2" "l2" 5 3456]]) )
