@@ -15,7 +15,9 @@ Par exemple :
 user=> (save (count-bar-chart data-ds :servicename) "barchart.png")
 </code></pre>
 
-Le main est dans le code. Vous devez ajouter le main au project.clj et coder la fonction appelée.
+Le main est dans le code. Vous devez coder la fonction appelée.
+
+N'oubliez pas d'ajouter le nom du module où se trouve le main au project.clj.
 
 Le main s'execute avec 
 

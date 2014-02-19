@@ -176,7 +176,9 @@ user=> (save (count-bar-chart data-ds :servicename) "barchart.png")
 </code></pre>
 
 
-<p>Le main est dans le code. Vous devez ajouter le main au project.clj et coder la fonction appelée.</p>
+<p>Le main est dans le code. Vous devez coder la fonction appelée.</p>
+
+<p>N'oubliez pas d'ajouter le nom du module où se trouve le main au project.clj.</p>
 
 <p>Le main s'execute avec</p>
 
@@ -184,6 +186,21 @@ user=> (save (count-bar-chart data-ds :servicename) "barchart.png")
 </code></pre>
 
 
+<p><br>
+<strong>-Solution-</strong></p>
+
+<pre><code>(defn response-time-analysis
+  "compute and save response time statistics"
+  [filename]
+  {:pre  [(string? filename)] } 
+  (let [ data-ds (convert-to-dataset "resources/sample.log")
+     metrics (compute-metrics metric-functions data-ds) 
+     metrics-ds (metrics-to-dataset metric-functions metrics) ]
+    (print metrics-ds)
+    (save metrics-ds  "stats.csv")
+    (save (count-bar-chart data-ds :servicename) "barchart.png")
+    ))
+</code></pre>
 
 </body>
 </html>
