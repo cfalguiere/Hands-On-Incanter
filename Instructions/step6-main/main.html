@@ -152,85 +152,55 @@ sup {
 	}
 }
 </style>
-<title>Prise en main de Midje
-===========
+<title>Assemblage final
+================
 
-Nous allons mettre en place midje et apprendre la syntaxe</title>
+Si vous avez sauté les steps précédents vous pouvez trouver le projet initial</title>
 
 </head>
 <body>
-<h1>Prise en main de Midje</h1>
+<h1>Assemblage final</h1>
 
-<p>Nous allons mettre en place midje et apprendre la syntaxe des tests.</p>
+<p>Si vous avez sauté les steps précédents vous pouvez trouver le projet initial de ce step dans Instructions/step6-main/initial.</p>
 
-<h2>1 - installation de Midje</h2>
+<p>Ecrivez une fonction main.</p>
 
-<p><br></p>
+<p>Cette fonction accepte un fichier en paramètre, le parse, calcule le tableau de statistiques et le sauve dans un fichier et sauve un des charts.</p>
 
-<p>Si vous avez déjà lein et midje. Cette étape n'est pas nécessaire.</p>
+<p>Vous pouvez utiliser la fonction save sur les charts et les datasets.</p>
 
-<p>Ouvrez le fichier profiles.clj qui se trouve dans le répertoire .lein dans votre home et s'il est vide ajoutez la ligne suivante. Sinon insérez le plugin lein-midje au bon endroit.</p>
+<p>Par exemple :</p>
 
-<pre><code>{:user {:plugins [[lein-midje "3.0.0"]]}}
+<pre><code>user=> (save (metrics-ds)  "stats.csv")
+user=> (save (count-bar-chart data-ds :servicename) "barchart.png")
 </code></pre>
 
 
-<p>Si vous tapez</p>
+<p>Le main est dans le code. Vous devez coder la fonction appelée.</p>
 
-<pre><code>$ lein</code></pre>
+<p>N'oubliez pas d'ajouter le nom du module où se trouve le main au project.clj.</p>
 
+<p>Le main s'execute avec</p>
 
-<p> ous avez maintenant une tâche midje disponible.</p>
-
-<h2>2 - Ajout de Midje dans le projet</h2>
-
-<p><br></p>
-
-<p>Ouvrer le fichier project.clj et ajoutez la dépendance envers Midje. Elle n'est pas utile au run-time mais seulement pour le développement. N'oubliez pas de mettre à jour les dépendances.</p>
-
-<pre><code> :profiles {:dev {:dependencies [[midje "1.5.1"]]}}
+<pre><code>lein run resources/sample.log 
 </code></pre>
 
 
-<h2>3 - Premier test</h2>
+<p><br>
+<strong>-Solution-</strong></p>
 
-<p><br></p>
-
-<p>Le template de projet contient un fichier core.clj dans src et core_test.clj dans test.</p>
-
-<p>Ouvrez le fichier core_test.clj. Ajoutez l'import de midje.sweet et un test Midje très simple puis lancez le test</p>
-
-<pre><code>(ns hoincanter.core-test
-  (:use  [midje.sweet])
-  (:require [clojure.test :refer :all]
-            [hoincanter.core :refer :all]))
-
-(fact "dummy test"
-      (+ 1 1) => 3)
+<pre><code>(defn response-time-analysis
+  "compute and save response time statistics"
+  [filename]
+  {:pre  [(string? filename)] } 
+  (let [ data-ds (convert-to-dataset "resources/sample.log")
+     metrics (compute-metrics metric-functions data-ds) 
+     metrics-ds (metrics-to-dataset metric-functions metrics) ]
+    (print metrics-ds)
+    (save metrics-ds  "stats.csv")
+    (save (count-bar-chart data-ds :servicename) "barchart.png")
+    ))
 </code></pre>
 
-
-
-
-<pre><code> $ lein midje 
-</code></pre>
-
-
-<p>Les deux tests échouent. Tout va bien !</p>
-
-<p>Relancez un REPL et lancez les tests en suivant les instructions ci-dessous</p>
-
-<pre><code>$ lein repl
-</code></pre>
-
-
-
-
-<pre><code>user=> (use 'midje.repl)
-user=> (autotest)
-</code></pre>
-
-
-<p>Corrigez les deux tests et sauvez. Regardez ce qui se passe dans le REPL.</p>
 </body>
 </html>

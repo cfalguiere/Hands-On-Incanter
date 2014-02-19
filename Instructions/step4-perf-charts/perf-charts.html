@@ -152,85 +152,39 @@ sup {
 	}
 }
 </style>
-<title>Prise en main de Midje
+<title>Des charts améliorés
 ===========
 
-Nous allons mettre en place midje et apprendre la syntaxe</title>
+Si vous avez sauté les steps précédents vous pouvez trouver le projet</title>
 
 </head>
 <body>
-<h1>Prise en main de Midje</h1>
+<h1>Des charts améliorés</h1>
 
-<p>Nous allons mettre en place midje et apprendre la syntaxe des tests.</p>
+<p>Si vous avez sauté les steps précédents vous pouvez trouver le projet initial de ce step dans Instructions/step4-perf-charts/initial.</p>
 
-<h2>1 - installation de Midje</h2>
+<p>Maintenant que nous avons des timestamps nous allons pouvoir afficher des séries chronologiques. Nous allons aussi voir comment configurer les charts.</p>
 
-<p><br></p>
+<p>Un ensemble de fonctions de chart avec un paramétrage des titres, des couleurs vous sont fournies dans Instructions/step4-perf-charts/perf-charts.txt.</p>
 
-<p>Si vous avez déjà lein et midje. Cette étape n'est pas nécessaire.</p>
+<p>Placez ces fonctions dans un module charts dans le projet hoincanter. Vous devrez créer un fichier charts.clj dans src.</p>
 
-<p>Ouvrez le fichier profiles.clj qui se trouve dans le répertoire .lein dans votre home et s'il est vide ajoutez la ligne suivante. Sinon insérez le plugin lein-midje au bon endroit.</p>
+<p>Adaptez les fonctions car la source n'a pas les mêmes noms de colonnes et traduisez les titres en français.</p>
 
-<pre><code>{:user {:plugins [[lein-midje "3.0.0"]]}}
-</code></pre>
+<p>Vous aurez besoin du module incanter.charts et d'autres modules.</p>
 
+<p>Ensuite depuis le REPL, essayez chacune des fonctions sur les relevés dont le temps est supérieur à 40 ms.</p>
 
-<p>Si vous tapez</p>
+<p><br>
+<strong>-Solution-</strong></p>
 
-<pre><code>$ lein</code></pre>
-
-
-<p> ous avez maintenant une tâche midje disponible.</p>
-
-<h2>2 - Ajout de Midje dans le projet</h2>
-
-<p><br></p>
-
-<p>Ouvrer le fichier project.clj et ajoutez la dépendance envers Midje. Elle n'est pas utile au run-time mais seulement pour le développement. N'oubliez pas de mettre à jour les dépendances.</p>
-
-<pre><code> :profiles {:dev {:dependencies [[midje "1.5.1"]]}}
-</code></pre>
-
-
-<h2>3 - Premier test</h2>
-
-<p><br></p>
-
-<p>Le template de projet contient un fichier core.clj dans src et core_test.clj dans test.</p>
-
-<p>Ouvrez le fichier core_test.clj. Ajoutez l'import de midje.sweet et un test Midje très simple puis lancez le test</p>
-
-<pre><code>(ns hoincanter.core-test
-  (:use  [midje.sweet])
-  (:require [clojure.test :refer :all]
-            [hoincanter.core :refer :all]))
-
-(fact "dummy test"
-      (+ 1 1) => 3)
+<pre><code>user=> (use '(hoincanter core charts)
+user=> (def ds (convert-to-dataset "../logs/TIME_MONITOR_2013-12-20.log"))
+user=> (def dslong  ($where {:duration {:gt 40}} ds))
+user=> (view (perf-histogram dslong))
 </code></pre>
 
 
 
-
-<pre><code> $ lein midje 
-</code></pre>
-
-
-<p>Les deux tests échouent. Tout va bien !</p>
-
-<p>Relancez un REPL et lancez les tests en suivant les instructions ci-dessous</p>
-
-<pre><code>$ lein repl
-</code></pre>
-
-
-
-
-<pre><code>user=> (use 'midje.repl)
-user=> (autotest)
-</code></pre>
-
-
-<p>Corrigez les deux tests et sauvez. Regardez ce qui se passe dans le REPL.</p>
 </body>
 </html>

@@ -152,85 +152,34 @@ sup {
 	}
 }
 </style>
-<title>Prise en main de Midje
-===========
-
-Nous allons mettre en place midje et apprendre la syntaxe</title>
+<title>Première fonction</title>
 
 </head>
 <body>
-<h1>Prise en main de Midje</h1>
+<h1>Première fonction</h1>
 
-<p>Nous allons mettre en place midje et apprendre la syntaxe des tests.</p>
+<p>Si vous avez sauté les steps précédents vous pouvez trouver le projet initial de ce step dans Instructions/step1-premiere-fonction/initial.</p>
 
-<h2>1 - installation de Midje</h2>
+<p>Pour commencer nous alons écrire le test de la fonction q qui raccourci l'écriture du quantile.</p>
 
-<p><br></p>
+<p>Rappelez vous que le quantile 0 est le le minimum de la liste. Cela facilitera votre test.</p>
 
-<p>Si vous avez déjà lein et midje. Cette étape n'est pas nécessaire.</p>
+<p>Pensez à importer le module incanter.stats pour la fonction quantile.</p>
 
-<p>Ouvrez le fichier profiles.clj qui se trouve dans le répertoire .lein dans votre home et s'il est vide ajoutez la ligne suivante. Sinon insérez le plugin lein-midje au bon endroit.</p>
+<p>Le quantile renvoie un décimal qu'il faudra arrondir pour pouvoir le comparer avec la valeur minimale de la série qui est un entier.</p>
 
-<pre><code>{:user {:plugins [[lein-midje "3.0.0"]]}}
+<p>Vous aurez besoin de round qui se trouve dans [org.clojure/clojure-contrib "1.2.0"].</p>
+
+<p><br>
+<strong>-Solution-</strong></p>
+
+<pre><code>(defn q [p serie] (quantile serie :probs [p])) 
+
+(fact "quantile 0 equals min of the list"
+      (round (first (q 0 [3 2 1]))) => 1 )
 </code></pre>
 
 
-<p>Si vous tapez</p>
-
-<pre><code>$ lein</code></pre>
-
-
-<p> ous avez maintenant une tâche midje disponible.</p>
-
-<h2>2 - Ajout de Midje dans le projet</h2>
-
-<p><br></p>
-
-<p>Ouvrer le fichier project.clj et ajoutez la dépendance envers Midje. Elle n'est pas utile au run-time mais seulement pour le développement. N'oubliez pas de mettre à jour les dépendances.</p>
-
-<pre><code> :profiles {:dev {:dependencies [[midje "1.5.1"]]}}
-</code></pre>
-
-
-<h2>3 - Premier test</h2>
-
-<p><br></p>
-
-<p>Le template de projet contient un fichier core.clj dans src et core_test.clj dans test.</p>
-
-<p>Ouvrez le fichier core_test.clj. Ajoutez l'import de midje.sweet et un test Midje très simple puis lancez le test</p>
-
-<pre><code>(ns hoincanter.core-test
-  (:use  [midje.sweet])
-  (:require [clojure.test :refer :all]
-            [hoincanter.core :refer :all]))
-
-(fact "dummy test"
-      (+ 1 1) => 3)
-</code></pre>
-
-
-
-
-<pre><code> $ lein midje 
-</code></pre>
-
-
-<p>Les deux tests échouent. Tout va bien !</p>
-
-<p>Relancez un REPL et lancez les tests en suivant les instructions ci-dessous</p>
-
-<pre><code>$ lein repl
-</code></pre>
-
-
-
-
-<pre><code>user=> (use 'midje.repl)
-user=> (autotest)
-</code></pre>
-
-
-<p>Corrigez les deux tests et sauvez. Regardez ce qui se passe dans le REPL.</p>
+<p>Vérifiez que vous pouvez utiliser la fonction q dans le REPL. Vous devrez importer le module hoincanter.core.</p>
 </body>
 </html>
