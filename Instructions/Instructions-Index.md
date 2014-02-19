@@ -7,12 +7,35 @@ Ce hands-on est dérivé de scripts réellement utilisés et collectés sous htt
 
 Ce hands-on nécessite leiningen et un éditeur.
 
+Materiel du cours
+-----------------------
+<br>
+
+Si vous avez Git vous pouvez cloner le repository
+
+<pre><code>$ git clone https://github.com/cfalguiere/Hands-On-Incanter/tree/master
+</code></pre>
+
+
+Si vous n'avez pas git, vous pouvez aller sur [Repository](https://github.com/cfalguiere/Hands-On-Incanter/tree/master)
+utiliser le bouton "Download ZIP" dans la colonne de droite.
+
+Ce dossier contient 
+
+- Presentations : la présentation montrée en introduction
+- Instructions : les instructions pour réaliser le hands on
+- elements : les fichiers nécessaires à chaque step
+- logs : des fichiers de log à utiliser dans le projet
+- solutions : les projets lein finis pour chaque step
+
+Les chemins utilisés dans les instructions supposent que vous avez crée votre projet lein dans ce répertoire.
+
 
 Prise en main d'IncanteR
 -----------------------
 <br>
 
-[Prise en main IncanteR](prise-en-main-incanter.md)
+[Prise en main d'IncanteR](init1-Incanter/prise-en-main-incanter.md)
 
 ### Documentation
 - [Incanter](http://incanter.org/)
@@ -26,7 +49,7 @@ Prise en main de Midje
 
 Nous allons utiliser Midje au lieu de Clojure.test.
 
-[Prise en main Midje](prise-en-main-midje.md)
+[Prise en main Midje](init2-midje/prise-en-main-midje.md)
 
 ### Documentation
 [Documentation](https://github.com/marick/Midje/wiki)
