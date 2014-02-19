@@ -14,7 +14,8 @@ Ouvrez le fichier profiles.clj qui se trouve dans le répertoire .lein dans votr
 <pre><code>{:user {:plugins [[lein-midje "3.0.0"]]}}
 </code></pre>
 
-Vous avez maintenant une tâche midje disponible dans lein.
+Si vous tapez
+<pre><code>$ lein</code></pre> ous avez maintenant une tâche midje disponible.
 
 2 - Ajout de Midje dans le projet
 --------------
@@ -25,20 +26,20 @@ Ouvrer le fichier project.clj et ajoutez la dépendance envers Midje. Elle n'est
 <pre><code> :profiles {:dev {:dependencies [[midje "1.5.1"]]}}
 </code></pre>
   
-Le template de projet contient un fichier core.clj dans src et core_test.clj dans test.
+
 
 3 - Premier test
 -------------
 <br>
 
-Ouvrez le fichier test et ajoutez un test Midje très simple puis lancez le test
+Le template de projet contient un fichier core.clj dans src et core_test.clj dans test.
+
+Ouvrez le fichier core_test.clj. Ajoutez l'import de midje.sweet et un test Midje très simple puis lancez le test
 
 <pre><code>(ns hoincanter.core-test
-(ns hoincanter.core-test
   (:use  [midje.sweet])
   (:require [clojure.test :refer :all]
-            [hoincanter.core :refer :all]
-	   ))
+            [hoincanter.core :refer :all]))
 
 (fact "dummy test"
       (+ 1 1) => 3)
@@ -52,8 +53,11 @@ Les deux tests échouent. Tout va bien !
 
 Relancez un REPL et lancez les tests en suivant les instructions ci-dessous 
 
-<pre><code> user=> (use 'midje.repl)
+<pre><code>$ lein repl
+</code></pre>
+
+<pre><code>user=> (use 'midje.repl)
 user=> (autotest)
 </code></pre>
 
-Corrigez les deux tests et sauvez. Regardez ce qui se passe dans le REPL.
+Corrigez les deux tests et sauvez. Regardez ce qui se passe dans le REPL. 

@@ -175,7 +175,12 @@ Nous allons mettre en place midje et apprendre la syntaxe</title>
 </code></pre>
 
 
-<p>Vous avez maintenant une tâche midje disponible dans lein.</p>
+<p>Si vous tapez</p>
+
+<pre><code>$ lein</code></pre>
+
+
+<p> ous avez maintenant une tâche midje disponible.</p>
 
 <h2>2 - Ajout de Midje dans le projet</h2>
 
@@ -187,20 +192,18 @@ Nous allons mettre en place midje et apprendre la syntaxe</title>
 </code></pre>
 
 
-<p>Le template de projet contient un fichier core.clj dans src et core_test.clj dans test.</p>
-
 <h2>3 - Premier test</h2>
 
 <p><br></p>
 
-<p>Ouvrez le fichier test et ajoutez un test Midje très simple puis lancez le test</p>
+<p>Le template de projet contient un fichier core.clj dans src et core_test.clj dans test.</p>
+
+<p>Ouvrez le fichier core_test.clj. Ajoutez l'import de midje.sweet et un test Midje très simple puis lancez le test</p>
 
 <pre><code>(ns hoincanter.core-test
-(ns hoincanter.core-test
   (:use  [midje.sweet])
   (:require [clojure.test :refer :all]
-            [hoincanter.core :refer :all]
-       ))
+            [hoincanter.core :refer :all]))
 
 (fact "dummy test"
       (+ 1 1) => 3)
@@ -217,7 +220,13 @@ Nous allons mettre en place midje et apprendre la syntaxe</title>
 
 <p>Relancez un REPL et lancez les tests en suivant les instructions ci-dessous</p>
 
-<pre><code> user=> (use 'midje.repl)
+<pre><code>$ lein repl
+</code></pre>
+
+
+
+
+<pre><code>user=> (use 'midje.repl)
 user=> (autotest)
 </code></pre>
 
