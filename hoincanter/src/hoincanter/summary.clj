@@ -5,11 +5,16 @@
 
 (defn q [p serie] (quantile serie :probs [p])) 
 
-;(def metrics {:count count :mean mean :sd sd})
+;(def metric-functions {:count count :mean mean :sd sd})
 
-(def metric-functions {:count count :mean mean :sd sd
-	      :min (partial q 0) :q90 (partial q 0.90)
-	      :q95 (partial q 0.95) :max (partial q 1)})
+(def metric-functions
+     { :count count
+      :mean mean
+      :sd sd
+      :min (partial q 0)
+      :q90 (partial q 0.90)
+      :q95 (partial q 0.95)
+      :max (partial q 1)})
 
 (defn compute-metric1
   "compute a metric grouped by label"

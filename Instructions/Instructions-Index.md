@@ -79,5 +79,12 @@ Vous trouverez les instructions dans
 [Un summary amélioré](stats-summary.html)
 
 
+Step 6 - main
+-----------------------
+<br>
+Nous allons assembler tout ça pour faire un programme.
+
+Vous trouverez les instructions dans 
+[Assemblage](main.html)
 
 

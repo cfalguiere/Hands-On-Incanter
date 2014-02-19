@@ -1,7 +1,9 @@
 (ns hoincanter.core
-  (:use [incanter.core :only [dataset]])
+  (:use [incanter.core :only [dataset save]])
   (:use [incanter.stats :only [quantile]])
   (:use [clojure.test :only [function?]] )
+  (:use [hoincanter.summary] )
+  (:use [hoincanter.charts] )
   (:require [clj-time.coerce :as coerce] )
   (:require [clj-time.format :as format] )
   (:require [clojure.java.io :as io]) )
@@ -63,4 +65,22 @@
   {:pre  [(string? filename)] } 
   (readings-to-dataset (extract-data filename)))
 
+(defn time-analysis
+  "compute and save response time statistics"
+  [filename]
+  {:pre  [(string? filename)] } 
+  (let [ data-ds (convert-to-dataset "resources/sample.log")
+	 metrics (compute-metrics metric-functions data-ds) 
+	 metrics-ds (metrics-to-dataset metric-functions metrics) ]
+    (print metrics-ds)
+    (save metrics-ds  "stats.csv")
+    (save (count-bar-chart data-ds :servicename) "barchart.png")
+    ))
 
+(defn -main
+  "usage: logs.txt"
+  [& args]
+  {:pre [(string? (nth args 0))] } 
+  (let [ [filename] args]
+    (time-analysis filename)))
+ 

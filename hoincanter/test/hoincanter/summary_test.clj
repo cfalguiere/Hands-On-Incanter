@@ -42,3 +42,9 @@
 	    metrics-ds (metrics-to-dataset {:count count, :mean mean} metrics) ]
 	($ :count ($where {:servicename "WS_1R_DetailAbonne"} metrics-ds)) => 1
 	($ :count ($where {:servicename "RS_OW_AgencyDataSupplierService"} metrics-ds)) => 2))
+
+(fact "it should return a dataset "
+      (let [ds (convert-to-dataset "resources/sample.log")
+	    metric-ds (compute-metric ds [:min (partial q 0)]) ]
+	(print  metric-ds)
+	(round ($ :min ($where {:servicename "WS_1R_DetailAbonne"} metric-ds))) => 261))

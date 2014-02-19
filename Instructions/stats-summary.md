@@ -130,10 +130,29 @@ La liste des labels de colonne dépend de la liste des métriques. Vous pouvez u
 
 Vous avez maintenant tous les éléments pour écrire la fonction compute-metrics-table.
 
-----
-TODO ajout des quantiles 
+Min, max et quantiles
+-------------------
 
-Les valeurs décimales sont formatées avec 2 chiffres après la virgule. La fonction de formatage est passée en paramètre.
+Ajoutez les métriques min, max, quantiles 90% et 95%. Vous devez construire des fonctions à passer en paramètre dans la map  metric-functions.
+
+Dupliquez le test de compute-metric et testez avec la fonction min puis adaptez metric-functions.
+
+<pre><code>
+(fact "it should return a dataset "
+      (let [ds (convert-to-dataset "resources/sample.log")
+	    metric-ds (compute-metric ds [:min (partial q 0)]) ]
+	(print  metric-ds)
+	(round ($ :min ($where {:servicename "WS_1R_DetailAbonne"} metric-ds))) => 261))
+</code></pre>
 
 
-# 
+<pre><code>user=> (def metric-functions {
+  :count count 
+  :mean mean :sd sd
+  :min (partial q 0) 
+  :q90 (partial q 0.90)
+  :q95 (partial q 0.95) 
+  :max (partial q 1)})
+</code></pre>
+
+ 
