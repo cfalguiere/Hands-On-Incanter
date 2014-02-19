@@ -1,0 +1,160 @@
+<!doctype html>
+<html lang="en">
+
+  <head>
+    <meta charset="utf-8">
+
+    <title>Hand On IncanterR</title>
+
+    <meta name="description" content="Hands On IncanteR">
+    <meta name="author" content="Claude Falgui&egrave;re">
+
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+    <link rel="stylesheet" href="../../libs/revealjs/css/reveal.min.css">
+    <link rel="stylesheet" href="../../libs/revealjs/css/theme/simple.css" id="theme">
+
+    <!-- For syntax highlighting -->
+    <link rel="stylesheet" href="../..//libs/revealjs/lib/css/zenburn.css">
+
+    <!-- If the query includes 'print-pdf', use the PDF print sheet -->
+    <script>
+      document.write( '<link rel="stylesheet" href="../../libsrevealjs/css/print/' + ( window.location.search.match( /print-pdf/gi ) ? 'pdf' : 'paper' ) + '.cs<a href="index.html">index.html</a>
+s" type="text/css" media="print">' );
+    </script>
+
+  </head>
+
+  <body>
+
+    <div class="reveal">
+
+      <!-- Any section element inside of this container is displayed as a slide -->
+      <div class="slides">
+	
+        <section>
+	<table><tr><td width=30%><a href="#" class="image">
+            <img src="images/qr-code.png" alt="QR Code" width=200 height=200
+            style="border:none;"> </td>
+	    <td>
+         <h1>Hands On IncanteR</h1>
+          <h4>Paris Clojure User Group</h4>
+          <h4>20 F&eacute;vrier 2014</h4>
+           <p>
+            <small><a
+      href="https://cfalguiere.wordpress.com">Claude  &nbsp;Falgui&egrave;re</a>  &nbsp;/ &nbsp; <a href="http://twitter.com/cfalguiere">@cfalguiere</a></small>
+          </p>
+	  <p> <small> Instructions et code : <br>
+	      &nbsp;<a
+          href="http://cfalguiere.github.io/Hands-On-Incanter/">http://cfalguiere.github.io/Hands-On-Incanter/</a></small></p>
+	 </td></tr></table>
+
+        </section>
+
+	<section>
+	<h3>IncanteR</h3>
+	  <a href="#" class="image">
+            <img src="images/incanter-clojure-r.png" alt="IncanteR = Clojure
+	+ R" style="border:none;">
+          </a>
+       </section>
+
+		<section>
+	<h3>Ecosyst&egrave;me Java</h3>
+	<br>
+	Colt et Parallel Colt (Statistiques)<br>
+	Netlib-Java (Alg&egrave;bre lin&eacute;aire)<bR>
+	JFreeChart (Graphiques)<br>
+	POI, OpenCVS (Formats Excel et CVS)<bR>
+	JLine (Input Console)
+	...<bR>
+      </section>
+
+
+	<section>
+	<h3>Fiche technique</h3>
+	<br>
+	API utilisable en DSL<br>
+	Manipulation de tables et de matrices<br>
+	Statistiques - Graphiques - Modèles - Test d’hypothèse 
+<br><br>
+<em>Hmmm ... Quoi par exemple ?</em>
+<br><br>
+	Probability distributions - Monte Carlo simulation<br>
+	Linear regression <br>
+Hypothesis / Significance / Correlation tests <br>
+Principal Componants Analysis (PCA) <br>
+Statistical learning / Classification <br>
+Bayesian statistics <br>
+
+       </section>
+
+	<section>
+	<h3>Pas de panique !</h3>
+	<br>
+	Le Hands-On se limite &agrave; quelques usages simples :<br><br>
+	Comptage, moyennes, <br>
+	Ecart-type<bR>
+	Quantiles<br>
+	Graphiques<bR>
+      </section>
+
+	<section>
+	<h3>Graphiques</h3>
+	  <a href="#" class="image">
+            <img src="images/graphiques.png" alt="Exemples de graphiques" style="border:none;">
+          </a>
+       </section>
+
+	<section>
+	<h3>Se lancer</h3>
+	  <a href="#" class="image">
+            <img src="images/se-lancer.png" alt="Download ou Lein" style="border:none;">
+          </a>
+       </section>
+
+	<section>
+	    <h2>Questions</h2>
+	    <h4>Claude Falgui&egrave;re - @cfalguiere</h4>
+	</section>
+		
+	<!-- notes -->
+	
+      </div>
+
+    </div>
+
+    <script src="../../libs/revealjs/lib/js/head.min.js"></script>
+    <script src="../../libs/revealjs/js/reveal.min.js"></script>
+
+    <script>
+
+      // Full list of configuration options available here:
+      // https://github.com/hakimel/reveal.js#configuration
+      Reveal.initialize({
+        controls: true,
+        progress: true,
+        history: true,
+        center: true,
+
+        theme: Reveal.getQueryHash().theme, // available themes are in /css/theme
+        transition: Reveal.getQueryHash().transition || 'default', // default/cube/page/concave/zoom/linear/fade/none
+
+        // Optional libraries used to extend on reveal.js
+        dependencies: [
+          { src: '../../libs/revealjs/lib/js/classList.js', condition: function() { return !document.body.classList; } },
+          { src: '../../libs/revealjs/plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+          { src: '../../libs/revealjs/plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+          { src: '../../libs/revealjs/plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+          { src: '../../libs/revealjs/plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
+          { src: '../../libs/revealjs/plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } }
+        ]
+      });
+
+    </script>
+
+  </body>
+</html>
