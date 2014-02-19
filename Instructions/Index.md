@@ -33,7 +33,7 @@ Prise en main d'IncanteR
 -----------------------
 <br>
 
-[Prise en main d'IncanteR](init1-Incanter/prise-en-main-incanter.md)
+[Prise en main d'IncanteR](init1-Incanter/prise-en-main-incanter.html)
 
 ### Documentation
 - [Incanter](http://incanter.org/)
@@ -47,7 +47,7 @@ Prise en main de Midje
 
 Nous allons utiliser Midje au lieu de Clojure.test.
 
-[Prise en main Midje](init2-midje/prise-en-main-midje.md)
+[Prise en main Midje](init2-midje/prise-en-main-midje.html)
 
 ### Documentation
 [Documentation](https://github.com/marick/Midje/wiki)
