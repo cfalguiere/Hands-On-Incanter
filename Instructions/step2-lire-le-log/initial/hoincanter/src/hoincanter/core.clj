@@ -17,9 +17,46 @@
   {:pre  [(string? x)]}
   (Long/parseLong (apply str (filter #(Character/isDigit %) x))))
 
+(defn str-to-ts
+  "convert a string into a numeric timestamp"
+  [x]
+  {:pre  [(string? x)]}
+  "TODO")
+
+(defn build-reading
+  "re-seq returns a vector consisting of the line and each group. This function filters out the line and converts duration into a long"
+  [[s t l d]]
+  "TODO" )
+
+(defn parse-line
+  "returns the file line as a vector representing the reading"
+  [pattern mapper source]
+  {:pre  [(and  (function? mapper) (string? source) (= java.util.regex.Pattern (type pattern)))]} 
+  "TODO" )
+
+
+
 (defn parse-file 
   "read the file and returns a list of readings"
   [filename parser]
   {:pre  [(and  (function? parser) (string? filename))]} 
   (with-open [rdr (io/reader filename)]
      (doall (map parser (line-seq rdr)))))
+
+(defn extract-data 
+  "get readings from the file"
+  [filename]
+  {:pre  [(string? filename)]} 
+  "TODO")
+
+(defn readings-to-dataset
+  "build a dataset from a list of readings"
+  [readings]
+  {:pre [(seq? readings)] } 
+  "TODO")
+
+(defn convert-to-dataset
+  "get a dataset from the file"
+  [filename]
+  {:pre  [(string? filename)] } 
+  "TODO")
