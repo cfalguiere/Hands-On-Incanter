@@ -13,9 +13,11 @@ Vous allez lire ce fichier et faire quelques analyses sur vos données avec Inca
 --------------
 <br>
 
-Commencez par créer un projet leiningen
+Commencez par créer un projet leiningen et allez dans le répertoire créé.
 
-<pre><code>$ leiningen new nom-projet</code></pre>
+<pre><code>$ leiningen new hoincanter
+$ cd hoincanter
+</code></pre>
 
 Editez le project.clj pour ajouter la librairie Incanter [incanter "1.5.4"] dans les :dependancies
 
@@ -33,7 +35,7 @@ Mettez à jour les dépendances de leiningen
 
 Copiez des fichiers CSV dans le répertoire du projet pour qu'il soit accessible plus facilement
 
-<pre><code>$ cp logs/TIME_MONITOR_2013-12-18.csv hoincanter/</code></pre>
+<pre><code>$ cp ../logs/TIME_MONITOR_2013-12-20.csv .</code></pre>
 
 
 Ouvrez un REPL
@@ -46,7 +48,7 @@ Vous aurez besoin d'importer les modules core, io, stats, et charts de la librai
 
 Chargez le fichier CSV
 
-<pre><code>user=> (def ds (read-dataset  "TIME_MONITOR_2013-12-18.csv" :header true :delim \;) )</code></pre>
+<pre><code>user=> (def ds (read-dataset  "TIME_MONITOR_2013-12-20.csv" :header true :delim \;) )</code></pre>
 
 3 - Quelques statistiques
 ----------------
@@ -70,13 +72,13 @@ user=> (quantile ($ :duration ds) :probs[0.95])
 
 Pour faciliter l'écriture des quantiles, nous allons écrire une fonction utilitaire q qui prend deux paramètres, le seuil de probabilité et la série. Vérifiez ensuite que la fonction est correcte en calculant le maximum.
 
-<pre><code> user=> (defn q [p serie] (quantile serie :probs [p]))
+<pre><code>user=> (defn q [p serie] (quantile serie :probs [p]))
 user=> (q 1 ($ :duration ds))
 </code></pre>
 
 Lorsque vous avez plusieurs agrégats à calculer, pouvez alléger l'écriture en utilisant with-data. Construisez un vecteur contenant le nombre, la moyenne, l'écart-type, le minimum, le maximum, et le quantile 95% de la colonne duration.
 
-<pre><code> user=> (with-data ($ :duration ds)
+<pre><code>user=> (with-data ($ :duration ds)
   #_=> [ (count $data) (mean $data) (sd $data) (q 0 $data) (q 1 $data) (q 0.95 $data) ] )
 </code></pre>  
 
@@ -89,14 +91,14 @@ Les données qui nous préoccupent sont les temps de réponse supérieurs à 40 
 Vous pouvez utiliser $where. Le langage de requêtes est le même que celui de MongoDB [Langage de requêtes]
 (http://docs.mongodb.org/manual/tutorial/query-documents/)
 
-<pre><code> user=> (def dslong  ($where {:duration {:gt 40}} ds))
+<pre><code>user=> (def dslong  ($where {:duration {:gt 40}} ds))
 </code></pre>  
 
 Jetons un coup d'oeil à la répartiion. 
 
 Summary vous permet de voir les différentes valeurs de services. Nous pouvons filtrer sur un service et calculer la moyenne des temps par exemple
 
-<pre><code> user=> (mean  ($ :duration  ($where {:servicename "RS_OW_AgencyDataSupplierService"} dslong)))
+<pre><code>user=> (mean  ($ :duration  ($where {:servicename "RS_OW_AgencyDataSupplierService"} dslong)))
 1556.1666666666667
 </code></pre> 
 
@@ -104,20 +106,20 @@ Il y a un moyen plus facile de les obtenir par $group-by. Cette fonction créer 
 
 Essayez $group-by sur dslong. C'est une map donc vous pouvez utiliser keys pour avoir seulement la liste des valeurs de la catégorie et 
 
-<pre><code> ($group-by :servicename dslong)
+<pre><code>user=> ($group-by :servicename dslong)
 </code></pre>  
 
 Vous pouvez obtenir le dataset correspondant à une valeur de servicename et l'utiliser pour calculer des statistiques
 
-<pre><code> user=> (def dslongADS (get  ($group-by :servicename dslong) {:servicename "RS_OW_AgencyDataSupplierService"} ))
+<pre><code>user=> (def dslongADS (get  ($group-by :servicename dslong) {:servicename "RS_OW_AgencyDataSupplierService"} ))
 </code></pre>  
 
-<pre><code> user=> (mean  ($ :duration  dslongADS ))
+<pre><code>user=> (mean  ($ :duration  dslongADS ))
 </code></pre> 
 
 Pour finir, nous allons afficher la moyenne  des temps de réponse pour chaque service. La fonction $rollup fait un $group-by et applique une fonction sur chaque groupe. Certains agrégats (mean, count …) ont un racourci syntaxique.
  
-<pre><code> user=> ($rollup mean :duration :servicename ds20)
+<pre><code>user=> ($rollup mean :duration :servicename dslong)
 </code></pre>
 
 5 - Les charts
@@ -128,19 +130,20 @@ Pour le moment, nous ne pouvons pas afficher les données sous une forme chronol
 
 Nous pouvons cependant afficher l'histogramme des temps de réponse.
 
-<pre><code> user=> (histogram  :duration :data ds20)
+<pre><code>user=> (histogram  :duration :data dslong)
 </code></pre>  
 
 Le diagramme est bien crée mais il faut utiliser view pour l'afficher.
 
-<pre><code> user=> (view (histogram  :duration :data ds20))
+<pre><code>user=> (view (histogram  :duration :data dslong))
 </code></pre>  
 
 Les couleurs et le rendu peuvent être modifiés. Nous ferons celà dans une fonction plus tard.
 
 Nous pouvons aussi afficher les relevés par catégorie sous forme de diagramme en barre ou de camembert.
 
-<pre><code> user=> (view (bar-chart :servicename :duration :vertical false :data  ($rollup count :duration :servicename dslong)))
+<pre><code>user=> (view (bar-chart :servicename :duration :vertical false :data  ($rollup count :duration :servicename dslong)))
+
 user=> (view (pie-chart :servicename  :duration  :vertical false :data  ($rollup count :duration :servicename dslong)))
 </code></pre>  
 
