@@ -1,20 +1,35 @@
-# Prise en main de Midje
+Prise en main de Midje
+===========
 
+Nous allons mettre en place midje et apprendre la syntaxe des tests.
+
+1 - installation de Midje
+------------------
+<br>
+
+Si vous avez déjà lein et midje. Cette étape n'est pas nécessaire.
 
 Ouvrez le fichier profiles.clj qui se trouve dans le répertoire .lein dans votre home et s'il est vide ajoutez la ligne suivante. Sinon insérez le plugin lein-midje au bon endroit.
  
-<pre><code>
-{:user {:plugins [[lein-midje "3.0.0"]]}}
+<pre><code>{:user {:plugins [[lein-midje "3.0.0"]]}}
 </code></pre>
 
 Vous avez maintenant une tâche midje disponible dans lein.
 
-Ouvrer le fichier project.clj et ajoutez la dépendance envers midje. Elle n'est pas utile au run-time mais seulement pour le développement. N'oubliez pas de mettre à jour les dépendances.
+2 - Ajout de Midje dans le projet
+--------------
+<br>
 
-<pre><code>  :profiles {:dev {:dependencies [[midje "1.5.1"]]}}
+Ouvrer le fichier project.clj et ajoutez la dépendance envers Midje. Elle n'est pas utile au run-time mais seulement pour le développement. N'oubliez pas de mettre à jour les dépendances.
+
+<pre><code> :profiles {:dev {:dependencies [[midje "1.5.1"]]}}
 </code></pre>
   
 Le template de projet contient un fichier core.clj dans src et core_test.clj dans test.
+
+3 - Premier test
+-------------
+<br>
 
 Ouvrez le fichier test et ajoutez un test Midje très simple puis lancez le test
 

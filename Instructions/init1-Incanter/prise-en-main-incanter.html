@@ -1,0 +1,351 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+<style>
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+blockquote {
+    margin: 0;
+    padding: 0;
+}
+body {
+    font-family: "Helvetica Neue", Helvetica, "Hiragino Sans GB", Arial, sans-serif;
+    font-size: 13px;
+    line-height: 18px;
+    color: #737373;
+    background-color: white;
+    margin: 10px 13px 10px 13px;
+}
+table {
+	margin: 10px 0 15px 0;
+	border-collapse: collapse;
+}
+td,th {	
+	border: 1px solid #ddd;
+	padding: 3px 10px;
+}
+th {
+	padding: 5px 10px;	
+}
+
+a {
+    color: #0069d6;
+}
+a:hover {
+    color: #0050a3;
+    text-decoration: none;
+}
+a img {
+    border: none;
+}
+p {
+    margin-bottom: 9px;
+}
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    color: #404040;
+    line-height: 36px;
+}
+h1 {
+    margin-bottom: 18px;
+    font-size: 30px;
+}
+h2 {
+    font-size: 24px;
+}
+h3 {
+    font-size: 18px;
+}
+h4 {
+    font-size: 16px;
+}
+h5 {
+    font-size: 14px;
+}
+h6 {
+    font-size: 13px;
+}
+hr {
+    margin: 0 0 19px;
+    border: 0;
+    border-bottom: 1px solid #ccc;
+}
+blockquote {
+    padding: 13px 13px 21px 15px;
+    margin-bottom: 18px;
+    font-family:georgia,serif;
+    font-style: italic;
+}
+blockquote:before {
+    content:"\201C";
+    font-size:40px;
+    margin-left:-10px;
+    font-family:georgia,serif;
+    color:#eee;
+}
+blockquote p {
+    font-size: 14px;
+    font-weight: 300;
+    line-height: 18px;
+    margin-bottom: 0;
+    font-style: italic;
+}
+code, pre {
+    font-family: Monaco, Andale Mono, Courier New, monospace;
+}
+code {
+    background-color: #fee9cc;
+    color: rgba(0, 0, 0, 0.75);
+    padding: 1px 3px;
+    font-size: 12px;
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    border-radius: 3px;
+}
+pre {
+    display: block;
+    padding: 14px;
+    margin: 0 0 18px;
+    line-height: 16px;
+    font-size: 11px;
+    border: 1px solid #d9d9d9;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+}
+pre code {
+    background-color: #fff;
+    color:#737373;
+    font-size: 11px;
+    padding: 0;
+}
+sup {
+    font-size: 0.83em;
+    vertical-align: super;
+    line-height: 0;
+}
+* {
+	-webkit-print-color-adjust: exact;
+}
+@media screen and (min-width: 914px) {
+    body {
+        width: 854px;
+        margin:10px auto;
+    }
+}
+@media print {
+	body,code,pre code,h1,h2,h3,h4,h5,h6 {
+		color: black;
+	}
+	table, pre {
+		page-break-inside: avoid;
+	}
+}
+</style>
+<title>Prise en main d'Incanter
+===============
+
+Incanter lit nativement les fichiers .csv.
+
+Dans un premier temps nous</title>
+
+</head>
+<body>
+<h1>Prise en main d'Incanter</h1>
+
+<p>Incanter lit nativement les fichiers .csv.</p>
+
+<p>Dans un premier temps nous allons supposer que vous avez transformé le fichier de log texte en un fichier .csv avec un autre outil.</p>
+
+<p>Ces fichiers apparaissent sous le nom TIME_MONITOR_<DATE>.csv dans le répertoire logs.</p>
+
+<p>Vous allez lire ce fichier et faire quelques analyses sur vos données avec Incanter en REPL.</p>
+
+<h2>1 - Installation d'IncanteR</h2>
+
+<p><br></p>
+
+<p>Commencez par créer un projet leiningen</p>
+
+<pre><code>$ leiningen new nom-projet</code></pre>
+
+
+<p>Editez le project.clj pour ajouter la librairie Incanter [incanter "1.5.4"] dans les :dependancies</p>
+
+<pre><code>  :dependencies [[org.clojure/clojure "1.5.1"][incanter "1.5.4"]])
+</code></pre>
+
+
+<p>Mettez à jour les dépendances de leiningen</p>
+
+<pre><code>$ lein deps</code></pre>
+
+
+<h2>2 - Chargement du fichier</h2>
+
+<p><br></p>
+
+<p>Copiez des fichiers CSV dans le répertoire du projet pour qu'il soit accessible plus facilement</p>
+
+<pre><code>$ cp logs/TIME_MONITOR_2013-12-18.csv hoincanter/</code></pre>
+
+
+<p>Ouvrez un REPL</p>
+
+<pre><code>$ lein repl</code></pre>
+
+
+<p>Vous aurez besoin d'importer les modules core, io, stats, et charts de la librairie incanter</p>
+
+<pre><code>user=> (use '(incanter core io stats charts))</code></pre>
+
+
+<p>Chargez le fichier CSV</p>
+
+<pre><code>user=> (def ds (read-dataset  "TIME_MONITOR_2013-12-18.csv" :header true :delim \;) )</code></pre>
+
+
+<h2>3 - Quelques statistiques</h2>
+
+<p><br></p>
+
+<p>Consultez les valeurs et relevez les noms de colonnes, le nombre de ligne et le summary du dataset</p>
+
+<pre><code>user=> (view ds)
+user=> (nrow ds)
+user=> (summary ds)
+</code></pre>
+
+
+<p>Sélectionnez la colonne des temps de réponse (duration) et calculez sa moyenne, son écart type, son maximum et le quantile 95%</p>
+
+<pre><code>user=> (view ($ :duration ds))
+user=> (mean ($ :duration ds))
+user=> (sd ($ :duration ds))
+user=> (quantile ($ :duration ds) :probs[1]) 
+user=> (quantile ($ :duration ds) :probs[0.95]) 
+</code></pre>
+
+
+<p>Pour faciliter l'écriture des quantiles, nous allons écrire une fonction utilitaire q qui prend deux paramètres, le seuil de probabilité et la série. Vérifiez ensuite que la fonction est correcte en calculant le maximum.</p>
+
+<pre><code> user=> (defn q [p serie] (quantile serie :probs [p]))
+user=> (q 1 ($ :duration ds))
+</code></pre>
+
+
+<p>Lorsque vous avez plusieurs agrégats à calculer, pouvez alléger l'écriture en utilisant with-data. Construisez un vecteur contenant le nombre, la moyenne, l'écart-type, le minimum, le maximum, et le quantile 95% de la colonne duration.</p>
+
+<pre><code> user=> (with-data ($ :duration ds)
+  #_=> [ (count $data) (mean $data) (sd $data) (q 0 $data) (q 1 $data) (q 0.95 $data) ] )
+</code></pre>
+
+
+<p></p>
+
+<h2>4 - Filtrer et catégoriser</h2>
+
+<p><br></p>
+
+<p>Les données qui nous préoccupent sont les temps de réponse supérieurs à 40 ms. Nous allons extraire un dataset contenant seulement ces relevés sous le nom dslong.</p>
+
+<p>Vous pouvez utiliser $where. Le langage de requêtes est le même que celui de MongoDB [Langage de requêtes]
+(http://docs.mongodb.org/manual/tutorial/query-documents/)</p>
+
+<pre><code> user=> (def dslong  ($where {:duration {:gt 40}} ds))
+</code></pre>
+
+
+<p></p>
+
+<p>Jetons un coup d'oeil à la répartiion.</p>
+
+<p>Summary vous permet de voir les différentes valeurs de services. Nous pouvons filtrer sur un service et calculer la moyenne des temps par exemple</p>
+
+<pre><code> user=> (mean  ($ :duration  ($where {:servicename "RS_OW_AgencyDataSupplierService"} dslong)))
+1556.1666666666667
+</code></pre>
+
+
+<p></p>
+
+<p>Il y a un moyen plus facile de les obtenir par $group-by. Cette fonction créer une map de dataset. Une entrée est crée pour chaque valeur de la clé et elle contient les valeurs filtrées sur cette valeur.</p>
+
+<p>Essayez $group-by sur dslong. C'est une map donc vous pouvez utiliser keys pour avoir seulement la liste des valeurs de la catégorie et</p>
+
+<pre><code> ($group-by :servicename dslong)
+</code></pre>
+
+
+<p></p>
+
+<p>Vous pouvez obtenir le dataset correspondant à une valeur de servicename et l'utiliser pour calculer des statistiques</p>
+
+<pre><code> user=> (def dslongADS (get  ($group-by :servicename dslong) {:servicename "RS_OW_AgencyDataSupplierService"} ))
+</code></pre>
+
+
+<p></p>
+
+<pre><code> user=> (mean  ($ :duration  dslongADS ))
+</code></pre>
+
+
+<p></p>
+
+<p>Pour finir, nous allons afficher la moyenne  des temps de réponse pour chaque service. La fonction $rollup fait un $group-by et applique une fonction sur chaque groupe. Certains agrégats (mean, count …) ont un racourci syntaxique.</p>
+
+<pre><code> user=> ($rollup mean :duration :servicename ds20)
+</code></pre>
+
+
+<h2>5 - Les charts</h2>
+
+<p><br></p>
+
+<p>Pour le moment, nous ne pouvons pas afficher les données sous une forme chronologique car la date n'a pas un format connu.</p>
+
+<p>Nous pouvons cependant afficher l'histogramme des temps de réponse.</p>
+
+<pre><code> user=> (histogram  :duration :data ds20)
+</code></pre>
+
+
+<p></p>
+
+<p>Le diagramme est bien crée mais il faut utiliser view pour l'afficher.</p>
+
+<pre><code> user=> (view (histogram  :duration :data ds20))
+</code></pre>
+
+
+<p></p>
+
+<p>Les couleurs et le rendu peuvent être modifiés. Nous ferons celà dans une fonction plus tard.</p>
+
+<p>Nous pouvons aussi afficher les relevés par catégorie sous forme de diagramme en barre ou de camembert.</p>
+
+<pre><code> user=> (view (bar-chart :servicename :duration :vertical false :data  ($rollup count :duration :servicename dslong)))
+user=> (view (pie-chart :servicename  :duration  :vertical false :data  ($rollup count :duration :servicename dslong)))
+</code></pre>
+
+
+<p></p>
+
+<p>Pour faciliter l'usage, nous allons écrire une fonction qui parse le fichier d'origine qui n'est pas un csv et construit le dataset.</p>
+
+<p>Nous allons aussi écrire une fonction qui fabrique une date correcte pour que l'on puisse visualiser la série temporelle.</p>
+
+<p>Nous utiliserons ensuite ces deux fonctions dans le REPL, mais pour le moment, sortons du REPL en tapant exit.</p>
+</body>
+</html>
