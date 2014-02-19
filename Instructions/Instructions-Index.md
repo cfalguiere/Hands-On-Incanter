@@ -7,6 +7,28 @@ Ce hands-on est dérivé de scripts réellement utilisés et collectés sous htt
 
 Ce hands-on nécessite leiningen et un éditeur.
 
+Materiel du cours
+-----------------------
+<br>
+
+Si vous avez Git vous pouvez cloner le repository
+
+<pre><code>$ git clone https://github.com/cfalguiere/Hands-On-Incanter/tree/master
+</code></pre>
+
+
+Si vous n'avez pas git, vous pouvez aller sur [Repository](https://github.com/cfalguiere/Hands-On-Incanter/tree/master)
+utiliser le bouton "Download ZIP" dans la colonne de droite.
+
+Ce dossier contient 
+
+- Instructions : les instructions
+- Presentations : la présentation montrée
+- logs : des fichiers de log à utiliser dans le projet
+- solutions : les projets lein finis pour chaque step
+
+Les chemins utilisés dans les instructions supposent que vous avez crée votre projet lein dans ce répertoire.
+
 
 Prise en main d'IncanteR
 -----------------------
