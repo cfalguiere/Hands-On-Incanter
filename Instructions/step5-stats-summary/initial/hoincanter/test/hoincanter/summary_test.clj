@@ -14,14 +14,9 @@
 
 (fact "it should return a dataset "
       (let [ds (convert-to-dataset "resources/sample.log")
-	    metric-ds (compute-metric1 ds :count count) ]
+	    metric-ds (compute-metric ds :count count) ]
 	($ :count ($where {:servicename "WS_1R_DetailAbonne"} metric-ds)) => 1))
  
-
-(fact "it should return a dataset "
-      (let [ds (convert-to-dataset "resources/sample.log")
-	    metric-ds (compute-metric ds [:count count]) ]
-	($ :count ($where {:servicename "WS_1R_DetailAbonne"} metric-ds)) => 1))
 
 (fact "it should return a list of 2 datasets. First one is WS_1R_DetailAbonne count 1"
       (let [ds (convert-to-dataset "resources/sample.log")
@@ -45,8 +40,3 @@
 	($ :count ($where {:servicename "WS_1R_DetailAbonne"} metrics-ds)) => 1
 	($ :count ($where {:servicename "RS_OW_AgencyDataSupplierService"} metrics-ds)) => 2))
 
-(fact "it should return a dataset "
-      (let [ds (convert-to-dataset "resources/sample.log")
-	    metric-ds (compute-metric ds [:min (partial q 0)]) ]
-	(print  metric-ds)
-	(round ($ :min ($where {:servicename "WS_1R_DetailAbonne"} metric-ds))) => 261))

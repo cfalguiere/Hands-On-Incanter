@@ -8,7 +8,7 @@
 (def metric-functions {:count count :mean mean :sd sd})
 
 
-(defn compute-metric1
+(defn compute-metric
   "compute a metric grouped by label"
   [ds metric-name metric-function]
   {:pre [(and (dataset? ds) (keyword? metric-name) (function? metric-function))] } 
@@ -18,11 +18,11 @@
 (defn compute-metrics
   "compute metrics grouped by label"
   [metric-functions ds]
-  {:pre [(and (dataset? ds) (function? metric-functions))] } 
+  {:pre [(and (dataset? ds) (map? metric-functions))] } 
   "TODO")
 
 (defn metrics-to-dataset
   "compute metrics grouped by label"
   [metric-functions metrics]
-  {:pre [(and (dataset? ds) (keyword? metric-name) (function? metric-functions))] } 
+  {:pre [(and  (seq? metrics)  (map? metric-functions))] } 
  "TODO")
