@@ -62,7 +62,7 @@ Step1 - Première fonction
 Pour commencer nous alons écrire le test de la fonction q qui raccourci l'écriture du quantile.
 
 Vous trouverez les instructions dans 
-[Première fonction](premiere-fonction.html)
+[Première fonction](step1-premiere-fonction/premiere-fonction.html)
 
 
 Step 2 - Lire le log
