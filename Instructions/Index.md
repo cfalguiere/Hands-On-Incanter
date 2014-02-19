@@ -71,7 +71,7 @@ Step 2 - Lire le log
 Le log n'est pas en csv à l'origine. Nous allons écrire quelques fonctions qui lisent et parsent le log dans son format d'origine.
 
 Vous trouverez les instructions dans 
-[Lire le log](lire-le-log.thml)
+[Lire le log](step2-lire-le-log/lire-le-log.html)
 
 
 Step 3 - Calculer les timestamps

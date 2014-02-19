@@ -1,0 +1,288 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+<style>
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+blockquote {
+    margin: 0;
+    padding: 0;
+}
+body {
+    font-family: "Helvetica Neue", Helvetica, "Hiragino Sans GB", Arial, sans-serif;
+    font-size: 13px;
+    line-height: 18px;
+    color: #737373;
+    background-color: white;
+    margin: 10px 13px 10px 13px;
+}
+table {
+	margin: 10px 0 15px 0;
+	border-collapse: collapse;
+}
+td,th {	
+	border: 1px solid #ddd;
+	padding: 3px 10px;
+}
+th {
+	padding: 5px 10px;	
+}
+
+a {
+    color: #0069d6;
+}
+a:hover {
+    color: #0050a3;
+    text-decoration: none;
+}
+a img {
+    border: none;
+}
+p {
+    margin-bottom: 9px;
+}
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    color: #404040;
+    line-height: 36px;
+}
+h1 {
+    margin-bottom: 18px;
+    font-size: 30px;
+}
+h2 {
+    font-size: 24px;
+}
+h3 {
+    font-size: 18px;
+}
+h4 {
+    font-size: 16px;
+}
+h5 {
+    font-size: 14px;
+}
+h6 {
+    font-size: 13px;
+}
+hr {
+    margin: 0 0 19px;
+    border: 0;
+    border-bottom: 1px solid #ccc;
+}
+blockquote {
+    padding: 13px 13px 21px 15px;
+    margin-bottom: 18px;
+    font-family:georgia,serif;
+    font-style: italic;
+}
+blockquote:before {
+    content:"\201C";
+    font-size:40px;
+    margin-left:-10px;
+    font-family:georgia,serif;
+    color:#eee;
+}
+blockquote p {
+    font-size: 14px;
+    font-weight: 300;
+    line-height: 18px;
+    margin-bottom: 0;
+    font-style: italic;
+}
+code, pre {
+    font-family: Monaco, Andale Mono, Courier New, monospace;
+}
+code {
+    background-color: #fee9cc;
+    color: rgba(0, 0, 0, 0.75);
+    padding: 1px 3px;
+    font-size: 12px;
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    border-radius: 3px;
+}
+pre {
+    display: block;
+    padding: 14px;
+    margin: 0 0 18px;
+    line-height: 16px;
+    font-size: 11px;
+    border: 1px solid #d9d9d9;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+}
+pre code {
+    background-color: #fff;
+    color:#737373;
+    font-size: 11px;
+    padding: 0;
+}
+sup {
+    font-size: 0.83em;
+    vertical-align: super;
+    line-height: 0;
+}
+* {
+	-webkit-print-color-adjust: exact;
+}
+@media screen and (min-width: 914px) {
+    body {
+        width: 854px;
+        margin:10px auto;
+    }
+}
+@media print {
+	body,code,pre code,h1,h2,h3,h4,h5,h6 {
+		color: black;
+	}
+	table, pre {
+		page-break-inside: avoid;
+	}
+}
+</style>
+<title>Lire le log
+==============
+
+Si vous avez sauté les steps précédents vous pouvez trouver le projet</title>
+
+</head>
+<body>
+<h1>Lire le log</h1>
+
+<p>Si vous avez sauté les steps précédents vous pouvez trouver le projet initial de ce step dans Instructions/step2-lire-le-log/initial.</p>
+
+<p>Le log n'est pas en csv à l'origine. Nous allons écrire quelques fonctions qui lisent et parsent le log dans son format d'origine.</p>
+
+<h2>1 - Parser une ligne </h2>
+
+<p><br></p>
+
+<p>La fonction re-seq découpe une ligne en fonction du pattern. Appliquez cette fonction à la chaîne "12 ab" pour obtenir les deux chaînes "12" et "ab"</p>
+
+<pre><code> user=> (re-seq #"(\d*) (.*)" "12 ab") 
+(["12 ab" "12" "ab"])
+</code></pre>
+
+
+<p>Le pattern d'extraction des données pour notre fichier vous est fourni dans la variable time-pattern.</p>
+
+<p>Nous aurons besoin de convertir la chaîne qui contient un nombre. Une fonction str-to-long vous est fournie. Essayez cette fonction sur la chaîne "12"</p>
+
+<p>Dans un premier temps vous allez devoir écrire la fonction build-reading qui prend la sortie du regexp avec le pattern time-pattern et renvoie un vector contenant la date, le nom du service et la durée en long. Le test est fourni.</p>
+
+<p><br>
+<strong>-Solution-</strong></p>
+
+<pre><code>(defn build-reading
+  "re-seq returns a vector consisting of the line and each group. This function filters out the line and converts duration into a long"
+  [[s t l d]]
+  [t l (str-to-long d)] )
+</code></pre>
+
+
+<p>Vous allez ensuite écrire la fonction parse-line.</p>
+
+<p>Cette fonction doit d'abord appliquer re-seq sur la ligne, puis transformer le résultat avec la fonction build-reading. Pour faciliter le test la fonction de transformation est passée en paramèttre. Le test est fourni. Vous aurez besoin d'importer clojure.java.io.</p>
+
+<p><br>
+<strong>-Solution-</strong></p>
+
+<pre><code>(defn parse-line
+  "returns the file line as a vector representing the reading"
+  [pattern mapper source]
+  {:pre  [(and  (function? mapper) (string? source) (= java.util.regex.Pattern (type pattern)))]} 
+  (first (map mapper (re-seq pattern source))))
+</code></pre>
+
+
+<h2>2 - Parser le fichier</h2>
+
+<p><br></p>
+
+<p>La fonction parse-file est fournie. Elle parcours le fichier et transmet chaque ligne au parseur.</p>
+
+<pre><code>(defn parse-file 
+  "read the file and returns a list of readings"
+  [filename parser]
+  {:pre  [(and  (function? parser) (string? filename))]} 
+  (with-open [rdr (io/reader filename)]
+     (doall (map parser (line-seq rdr)))))
+</code></pre>
+
+
+<p>Pour appeler la parse-file nous avons besoin d'une fonction "parser" qui prend la ligne du fichier en paramètre.</p>
+
+<p>Nous allons construire cette fonction en définissant une fonction partielle ou curry à partir de parse-line. Nous avons 2 paramètre à curryer. partial prend une fonction à n arguments et un paramètre et retourne une fonction à n-1 arguments.</p>
+
+<p>La fonction qui définie la fonction parser et lance la lecture du fichier s'appelle extract-data et le test est fourni.</p>
+
+<p><br>
+<strong>-Solution-</strong></p>
+
+<pre><core>(defn extract-data 
+  "get readings from the file"
+  [filename]
+  {:pre  [(string? filename)]} 
+  (let [parser (partial (partial parse-line time-pattern)  build-reading) ]
+    (parse-file filename parser))) 
+</core></pre>
+
+
+<h2>3 - Construire le dataset</h2>
+
+<p><br>
+Il nous reste à construire un dataset avec les bons noms de colonnes à partir de la sequence obtenue à la lecture du fichier.</p>
+
+<p>Vous pouvez utiliser la fonction dataset et lui passer une liste de noms de colonnes et les données extraites du fichier.</p>
+
+<p><br>
+<strong>-Solution-</strong></p>
+
+<pre><code>
+(defn readings-to-dataset
+  "build a dataset from a list of readings"
+  [readings]
+  {:pre [(seq? readings)] } 
+  (dataset [:timestamp :servicename :duration] readings))
+</code></pre>
+
+
+<p>On peut maintenant extraire les données lues dans le fichier dans un dataset en combinant la fonction d'extraction des données extract-data  et la fonction de création de dataset readings-to-dataset.</p>
+
+<p><br>
+<strong>-Solution-</strong></p>
+
+<pre><code>(defn convert-to-dataset
+  "get a dataset from the file"
+  [filename]
+  {:pre  [(string? filename)] } 
+  (readings-to-dataset (extract-data filename)))
+</code></pre>
+
+
+<p>Vous pouvez maintenant ouvrir un REPL et lire un des fichiers .log fournis. Vous aurez besoin d'importer le module hoincanter.core.</p>
+
+<pre><code>user=> (use 'hoincanter.core)
+user=> (use '(incanter io core charts stats))
+user=> (view (convert-to-dataset "resources/sample.log"))
+user=> (view (histogram :duration :data (convert-to-dataset "resources/sample.log")))
+</code></pre>
+
+
+<p>Et la time-series-plot ?</p>
+
+<p>Et bien toujours pas car la date en chaîne n'est pas un timestamp valable.</p>
+</body>
+</html>
