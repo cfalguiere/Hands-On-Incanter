@@ -35,7 +35,7 @@ Prise en main d'IncanteR
 -----------------------
 <br>
 
-[Prise en main IncanteR](prise-en-main-incanter.md)
+[Prise en main d'IncanteR](init1-Incanter/prise-en-main-incanter.md)
 
 ### Documentation
 - [Incanter](http://incanter.org/)

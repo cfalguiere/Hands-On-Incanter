@@ -1,12 +1,16 @@
-# Prise en main d'Incanter
+Prise en main d'Incanter
+===============
 
-Dans un premier temps vous avez transformé le fichier de texte en un fichier .csv avec un autre outil. 
+Incanter lit nativement les fichiers .csv.
 
-Ces fichiers apparaissent sous le nom TIME_MONITOR_<DATE>.csv dans le répertoire log.
+Dans un premier temps nous allons supposer que vous avez transformé le fichier de log texte en un fichier .csv avec un autre outil. 
+
+Ces fichiers apparaissent sous le nom TIME_MONITOR_<DATE>.csv dans le répertoire logs.
 
 Vous allez lire ce fichier et faire quelques analyses sur vos données avec Incanter en REPL.
 
-## 1 Installation d'IncanteR
+1 - Installation d'IncanteR
+--------------
 <br>
 
 Commencez par créer un projet leiningen
@@ -23,7 +27,8 @@ Mettez à jour les dépendances de leiningen
 <pre><code>$ lein deps</code></pre>
 
 
-## 2 Chargement du fichier
+2 - Chargement du fichier
+-----------------
 <br>
 
 Copiez des fichiers CSV dans le répertoire du projet pour qu'il soit accessible plus facilement
@@ -43,7 +48,8 @@ Chargez le fichier CSV
 
 <pre><code>user=> (def ds (read-dataset  "TIME_MONITOR_2013-12-18.csv" :header true :delim \;) )</code></pre>
 
-## 3 Quelques statistiques
+3 - Quelques statistiques
+----------------
 <br>
 
 Consultez les valeurs et relevez les noms de colonnes, le nombre de ligne et le summary du dataset
@@ -74,7 +80,8 @@ Lorsque vous avez plusieurs agrégats à calculer, pouvez alléger l'écriture e
   #_=> [ (count $data) (mean $data) (sd $data) (q 0 $data) (q 1 $data) (q 0.95 $data) ] )
 </code></pre>  
 
-## 4 Filtrer et catégoriser
+4 - Filtrer et catégoriser
+--------------
 <br>
 
 Les données qui nous préoccupent sont les temps de réponse supérieurs à 40 ms. Nous allons extraire un dataset contenant seulement ces relevés sous le nom dslong.
@@ -113,7 +120,8 @@ Pour finir, nous allons afficher la moyenne  des temps de réponse pour chaque s
 <pre><code> user=> ($rollup mean :duration :servicename ds20)
 </code></pre>
 
-## 5 Les charts
+5 - Les charts
+-----------------
 <br>
 
 Pour le moment, nous ne pouvons pas afficher les données sous une forme chronologique car la date n'a pas un format connu.
