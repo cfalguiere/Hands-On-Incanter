@@ -82,7 +82,7 @@ Le fichier contient des dates sous forme de chaîne. Dans IncanteR nous avons be
 Nous allons utilier clj-time qui est un wrapper sur Joda Time
 
 Vous trouverez les instructions dans 
-[Calculer les timestamps](timestamps.html)
+[Calculer les timestamps](step3-timestamps/timestamps.html)
 
 
 Step 4 - Des charts améliorés

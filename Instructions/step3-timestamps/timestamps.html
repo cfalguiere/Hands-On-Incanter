@@ -1,0 +1,254 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+<style>
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+blockquote {
+    margin: 0;
+    padding: 0;
+}
+body {
+    font-family: "Helvetica Neue", Helvetica, "Hiragino Sans GB", Arial, sans-serif;
+    font-size: 13px;
+    line-height: 18px;
+    color: #737373;
+    background-color: white;
+    margin: 10px 13px 10px 13px;
+}
+table {
+	margin: 10px 0 15px 0;
+	border-collapse: collapse;
+}
+td,th {	
+	border: 1px solid #ddd;
+	padding: 3px 10px;
+}
+th {
+	padding: 5px 10px;	
+}
+
+a {
+    color: #0069d6;
+}
+a:hover {
+    color: #0050a3;
+    text-decoration: none;
+}
+a img {
+    border: none;
+}
+p {
+    margin-bottom: 9px;
+}
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    color: #404040;
+    line-height: 36px;
+}
+h1 {
+    margin-bottom: 18px;
+    font-size: 30px;
+}
+h2 {
+    font-size: 24px;
+}
+h3 {
+    font-size: 18px;
+}
+h4 {
+    font-size: 16px;
+}
+h5 {
+    font-size: 14px;
+}
+h6 {
+    font-size: 13px;
+}
+hr {
+    margin: 0 0 19px;
+    border: 0;
+    border-bottom: 1px solid #ccc;
+}
+blockquote {
+    padding: 13px 13px 21px 15px;
+    margin-bottom: 18px;
+    font-family:georgia,serif;
+    font-style: italic;
+}
+blockquote:before {
+    content:"\201C";
+    font-size:40px;
+    margin-left:-10px;
+    font-family:georgia,serif;
+    color:#eee;
+}
+blockquote p {
+    font-size: 14px;
+    font-weight: 300;
+    line-height: 18px;
+    margin-bottom: 0;
+    font-style: italic;
+}
+code, pre {
+    font-family: Monaco, Andale Mono, Courier New, monospace;
+}
+code {
+    background-color: #fee9cc;
+    color: rgba(0, 0, 0, 0.75);
+    padding: 1px 3px;
+    font-size: 12px;
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    border-radius: 3px;
+}
+pre {
+    display: block;
+    padding: 14px;
+    margin: 0 0 18px;
+    line-height: 16px;
+    font-size: 11px;
+    border: 1px solid #d9d9d9;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+}
+pre code {
+    background-color: #fff;
+    color:#737373;
+    font-size: 11px;
+    padding: 0;
+}
+sup {
+    font-size: 0.83em;
+    vertical-align: super;
+    line-height: 0;
+}
+* {
+	-webkit-print-color-adjust: exact;
+}
+@media screen and (min-width: 914px) {
+    body {
+        width: 854px;
+        margin:10px auto;
+    }
+}
+@media print {
+	body,code,pre code,h1,h2,h3,h4,h5,h6 {
+		color: black;
+	}
+	table, pre {
+		page-break-inside: avoid;
+	}
+}
+</style>
+<title>'user/d</title>
+
+</head>
+<body>
+<h1>Calculer les timestamps</h1>
+
+<p>Si vous avez sauté les steps précédents vous pouvez trouver le projet initial de ce step dans Instructions/step3-timestamps/initial.</p>
+
+<p>Le fichier contient des dates sous forme de chaîne. Dans IncanteR nous avons besoin de timestampss en millisecondes.</p>
+
+<p>Nous allons utilier clj-time qui est un wrapper sur Joda Time</p>
+
+<p><a href="https://github.com/clj-time/clj-time">clj-time</a></p>
+
+<h2>1 - Essais dans le REPL</h2>
+
+<p><br></p>
+
+<p>Ajoutez [clj-time "0.6.0"] dans le projet.clj et dans le REPL importez clj-time.core, clj-time.format et clj-time.coerce. date-time vous permet de créer une date et to-long la convertie en long.</p>
+
+<pre><code>user=> (use '(clj-time core coerce))
+user=> (def d (date-time 2013 12 19 8 0 1 004))
+#'user/d
+user=> d
+#<DateTime 2013-02-01T14:05:00.000Z>
+user=> (to-long d)
+1359727500000
+</code></pre>
+
+
+<p>Le format de notre fichier est presque ISO 8601.</p>
+
+<pre><code>user=> (to-long "2013-12-19 08:00:01,004")
+nil
+user=> (to-long "2013-12-19T08:00:01,004")
+1387440001004
+</code></pre>
+
+
+
+
+<pre><code>user=> (def custom-formatter (formatter "yyyy-MM-dd HH:mm:ss,SSS"))
+#'user/custom-formatter
+user=> (parse custom-formatter "2013-12-19 08:00:01,004")
+#<DateTime 2013-12-19T08:00:01.004Z>
+</code></pre>
+
+
+<h2>2 - Modifiez les fonctions pour calculer le timestamp</h2>
+
+<p><br></p>
+
+<p>Ajoutez le custom-formatter et codez la fonction str-to-ts sur le modèle de str-to-long. Cette fonction parse une chaîne contenant la date et calcule le timestamps en millisecondes.</p>
+
+<p><br>
+<strong>-Solution-</strong></p>
+
+<pre><code>(defn str-to-ts
+  "convert a string into a numeric timestamp"
+  [x]
+  {:pre  [(string? x)]}
+  (coerce/to-long  (format/parse custom-formatter x)))
+</code></pre>
+
+
+<p>Modifiez les fonction mapper build-reading et readings-to-dataset pour ajouter une colonne ts qui contient le timestamp. Ajoutez également les tests correspondants.</p>
+
+<p><br>
+<strong>-Solution-</strong></p>
+
+<pre><code>(defn build-reading
+  "re-seq returns a vector consisting of the line and each group. This function filters out the line and converts duration into a long"
+  [[s t l d]]
+  [t l (str-to-long d) (str-to-ts t) ] )
+  
+(defn readings-to-dataset
+  "build a dataset from a list of readings"
+  [readings]
+  {:pre [(seq? readings)] } 
+  (dataset [:timestamp :servicename :duration :ts] readings))
+
+</code></pre>
+
+
+<p>Une fois la fonction disponible vous pouvez visualiser vos données avec le timestamps et enfin le time-series-plot. Assurez vous que vous avez bien importé incanter.charts.</p>
+
+<pre><code>user=> (view (convert-to-dataset "resources/sample.log"))
+user=> (view (time-series-plot :ts :duration  :data (convert-to-dataset "resources/sample.log")))
+</code></pre>
+
+
+<p>C'est un peu plus intéressant avec plus de données.</p>
+
+<pre><code>user=> (view (convert-to-dataset "../logs/TIME_MONITOR_2013-12-20.log"))
+</code></pre>
+
+
+
+</body>
+</html>
