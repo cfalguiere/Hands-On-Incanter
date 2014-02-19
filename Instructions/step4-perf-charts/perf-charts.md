@@ -1,4 +1,7 @@
-# Des charts améliorés
+Des charts améliorés
+===========
+
+Si vous avez sauté les steps précédents vous pouvez trouver le projet initial de ce step dans Instructions/step4-perf-charts/initial.
 
 Maintenant que nous avons des timestamps nous allons pouvoir afficher des séries chronologiques. Nous allons aussi voir comment configurer les charts.
 

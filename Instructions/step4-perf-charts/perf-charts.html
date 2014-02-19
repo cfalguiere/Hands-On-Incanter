@@ -152,11 +152,16 @@ sup {
 	}
 }
 </style>
-<title>Des charts améliorés</title>
+<title>Des charts améliorés
+===========
+
+Si vous avez sauté les steps précédents vous pouvez trouver le projet</title>
 
 </head>
 <body>
 <h1>Des charts améliorés</h1>
+
+<p>Si vous avez sauté les steps précédents vous pouvez trouver le projet initial de ce step dans Instructions/step4-perf-charts/initial.</p>
 
 <p>Maintenant que nous avons des timestamps nous allons pouvoir afficher des séries chronologiques. Nous allons aussi voir comment configurer les charts.</p>
 
@@ -166,9 +171,20 @@ sup {
 
 <p>Adaptez les fonctions car la source n'a pas les mêmes noms de colonnes et traduisez les titres en français.</p>
 
+<p>Vous aurez besoin du module incanter.charts et d'autres modules.</p>
+
 <p>Ensuite depuis le REPL, essayez chacune des fonctions sur les relevés dont le temps est supérieur à 40 ms.</p>
 
-<p>user=> (def ds (convert-to-dataset "../logs/TIME_MONITOR_2013-12-20.log"))
-user=> (def dslong  ($where {:duration {:gt 40}} ds))</p>
+<p><br>
+<strong>-Solution-</strong></p>
+
+<pre><code>user=> (use '(hoincanter core charts)
+user=> (def ds (convert-to-dataset "../logs/TIME_MONITOR_2013-12-20.log"))
+user=> (def dslong  ($where {:duration {:gt 40}} ds))
+user=> (view (perf-histogram dslong))
+</code></pre>
+
+
+
 </body>
 </html>
