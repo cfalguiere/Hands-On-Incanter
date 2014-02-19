@@ -1,5 +1,6 @@
 (ns hoincanter.core-test
   (:use  [midje.sweet])
+  (:use [incanter.core :only [$]])
   (:require [clojure.test :refer :all]
             [hoincanter.core :refer :all])
   (:use [clojure.contrib.generic.math-functions :only [round]]))
@@ -12,9 +13,15 @@
 (fact "it should convert a string into a long"
       (str-to-long "123456789") => 123456789)
 
-(fact "it should return a vector consisting in 3 last groups and time stamp"
+(fact "it should return a vector consisting in 3 last groups"
       ( build-reading [ "Full line text" "2013-12-13 08:00:00,924" "RS_OW_AgencyDataSupplierService" "208"])
-	=> ["2013-12-13 08:00:00,924" "RS_OW_AgencyDataSupplierService" 208 1386921600924])
+	=> ["2013-12-13 08:00:00,924" "RS_OW_AgencyDataSupplierService" 208])
+
+:: en attente
+;;(fact "it should return a vector consisting in 3 last groups and time stamp"
+;;      ( build-reading [ "Full line text" "2013-12-13 08:00:00,924" "RS_OW_AgencyDataSupplierService" "208"])
+;;	=> ["2013-12-13 08:00:00,924" "RS_OW_AgencyDataSupplierService" 208 1386921600924])
+
 
 (defn test-mapper
   [[s t l]]

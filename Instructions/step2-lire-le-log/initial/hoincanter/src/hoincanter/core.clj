@@ -17,12 +17,6 @@
   {:pre  [(string? x)]}
   (Long/parseLong (apply str (filter #(Character/isDigit %) x))))
 
-(defn str-to-ts
-  "convert a string into a numeric timestamp"
-  [x]
-  {:pre  [(string? x)]}
-  "TODO")
-
 (defn build-reading
   "re-seq returns a vector consisting of the line and each group. This function filters out the line and converts duration into a long"
   [[s t l d]]
