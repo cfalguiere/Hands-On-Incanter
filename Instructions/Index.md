@@ -99,15 +99,15 @@ Step 5 - Un summary amélioré
 La fonction summary d'IncanteR affche un résumé assez basique. Nous allons construire un summary plus adapté à nos besoins.
 
 Vous trouverez les instructions dans 
-[Un summary amélioré](stats-summary.html)
+[Un summary amélioré](step5-stats-summary/stats-summary.html)
 
 
-Step 6 - main
+Step 6 - Main
 -----------------------
 <br>
 Nous allons assembler tout ça pour faire un programme.
 
 Vous trouverez les instructions dans 
-[Assemblage](main.html)
+[Main](step6-main/main.html)
 
 
