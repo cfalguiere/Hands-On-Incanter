@@ -49,7 +49,7 @@ Prise en main de Midje
 
 Nous allons utiliser Midje au lieu de Clojure.test.
 
-[Prise en main Midje](prise-en-main-midje.md)
+[Prise en main Midje](init2-midje/prise-en-main-midje.md)
 
 ### Documentation
 [Documentation](https://github.com/marick/Midje/wiki)
