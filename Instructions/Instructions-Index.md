@@ -22,8 +22,9 @@ utiliser le bouton "Download ZIP" dans la colonne de droite.
 
 Ce dossier contient 
 
-- Instructions : les instructions
-- Presentations : la présentation montrée
+- Presentations : la présentation montrée en introduction
+- Instructions : les instructions pour réaliser le hands on
+- elements : les fichiers nécessaires à chaque step
 - logs : des fichiers de log à utiliser dans le projet
 - solutions : les projets lein finis pour chaque step
 
