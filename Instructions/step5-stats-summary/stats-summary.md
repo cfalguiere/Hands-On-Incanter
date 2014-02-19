@@ -1,15 +1,21 @@
 Un summary amélioré
 ===============
 
+Si vous avez sauté les steps précédents vous pouvez trouver le projet initial de ce step dans Instructions/step5-stats-summary/initial.
+
 La fonction summary d'IncanteR affiche un résumé assez basique. Nous allons construire un summary plus adapté à nos besoins.
 
 Le but est de constuire un tableau qui affiche les principales statistiques (nombre d'occurences, moyenne, écart-type, min …) pour chaque service. Ce tableau est construit sous la forme d'un dataset.
 
 Le structure de données est la suivante. Le dataset est une map qui comporte deux entrées, un vecteur contenant les noms de colonnes et une liste contenant les lignes. Chaque ligne est un vecteur de valeurs.
 
+1 - Le module Summary
+-------------------
+<br>
+
 Vous placerez ces fonctions dans un module summary. Vous allez commencer par déplacer la fonction q et son test dans ce module.
 
-Dataset pour une métrique
+2 - Dataset pour une métrique
 -------------------
 <br>
 
@@ -33,6 +39,9 @@ La fonction coll-names vous permettra de remplacer la liste des noms de colonnes
 
 Faites d'abord un test sur la fonction count.
 
+<br>
+**-Solution-**
+
 <pre><code>(defn compute-metric
   "compute a metric grouped by label"
   [ds metric-name f]
@@ -43,25 +52,26 @@ Faites d'abord un test sur la fonction count.
 
 
 
-Application à l'ensemble des métriques
+3 - Application à l'ensemble des métriques
 -------------------
-
+<br>
 Le tableau associatid metric-functions liste les métriques que vous voulons calculer. 
-<pre><code>
-(def metric-functions {:count count :mean mean :sd sd})
-</pre></code>
 
+<pre><code>(def metric-functions {:count count :mean mean :sd sd})
+</pre></code>
 Nous allons mapper la fonction de calcul d'une métrique sur le tableau de métriques. 
 
-<pre><code>
-(map key  metric-functions)
+<pre><code>(map key  metric-functions)
 </code></pre>
 
-Un essaie sur avec une fonction simple montre que le résultat sera une liste de datasets.
+Un essai sur avec une fonction simple montre que le résultat sera une liste de datasets.
 
 La fonction map va passer un vecteur pour chaque entrée du tableau associatif. Vous devez donc adapter la fonction compute-metric.
 
 La solution la plus simple est d'utiliser une fonction curry et de destructurer les paramètres de compute-metric. Pensez à modificer la fonction et le test.
+
+<br>
+**-Solution-**
 
 <pre><code>(defn compute-metric
   "compute a metric grouped by label"
@@ -81,13 +91,14 @@ La solution la plus simple est d'utiliser une fonction curry et de destructurer 
 Une fois curriée la fonction compute-metric n'attend plus qu'un paramètre qui est passé automatiquement.
 La fonction compute-metric attend maintenant un vecteur contenant la clé et la valeurs qui sont extraits directement en raison de la déstructuration.
 
-Fusion des colonnes 
+4 - Fusion des colonnes 
 -------------------
+<br>
 
 Allez dans un REPL et étudiez la structure des données.
 
-<pre><code>
-user=> (use '(hoincanter core summary)
+
+<pre><code>user=> (use '(hoincanter core summary)
 user=> (use '(incanter core io stats))
 user=> (def ds (convert-to-dataset "resources/sample.log"))
 user=> (def metrics-list  (compute-metrics {:count count, :mean mean} ds))
@@ -124,29 +135,25 @@ Il ne reste plus qu'à ajouter les noms de colonnes du dataset.
 </code></pre>
 
 La liste des labels de colonne dépend de la liste des métriques. Vous pouvez utiliser keys pour extraire la liste des clés de la map metrics et concat pour les rassembler en une seule liste.
+
   
 <pre><code>user=> (concat [:servicename] (keys metric-functions))
 </code></pre>
 
 Vous avez maintenant tous les éléments pour écrire la fonction compute-metrics-table.
 
-Min, max et quantiles
+5 - Min, max et quantiles
 -------------------
-
+<br>
 Ajoutez les métriques min, max, quantiles 90% et 95%. Vous devez construire des fonctions à passer en paramètre dans la map  metric-functions.
 
 Dupliquez le test de compute-metric et testez avec la fonction min puis adaptez metric-functions.
 
-<pre><code>
-(fact "it should return a dataset "
-      (let [ds (convert-to-dataset "resources/sample.log")
-	    metric-ds (compute-metric ds [:min (partial q 0)]) ]
-	(print  metric-ds)
-	(round ($ :min ($where {:servicename "WS_1R_DetailAbonne"} metric-ds))) => 261))
-</code></pre>
+<br>
+**-Solution-**
 
 
-<pre><code>user=> (def metric-functions {
+<pre><code>user=>(def metric-functions {
   :count count 
   :mean mean :sd sd
   :min (partial q 0) 
@@ -154,5 +161,14 @@ Dupliquez le test de compute-metric et testez avec la fonction min puis adaptez 
   :q95 (partial q 0.95) 
   :max (partial q 1)})
 </code></pre>
+
+<pre><code>(fact "it should return a dataset "
+      (let [ds (convert-to-dataset "resources/sample.log")
+	    metric-ds (compute-metric ds [:min (partial q 0)]) ]
+	(print  metric-ds)
+	(round ($ :min ($where {:servicename "WS_1R_DetailAbonne"} metric-ds))) => 261))
+</code></pre>
+
+
 
  
