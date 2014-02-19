@@ -7,4 +7,5 @@
 		 [incanter "1.5.4"]
 		 [org.clojure/clojure-contrib "1.2.0"]
 		 [clj-time "0.6.0"] ]
-  :profiles {:dev {:dependencies [[midje "1.5.1"]]}})
+  :profiles {:dev {:dependencies [[midje "1.5.1"]]}}
+  :main hoincanter.core)
