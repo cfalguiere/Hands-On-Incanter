@@ -23,10 +23,8 @@ utiliser le bouton "Download ZIP" dans la colonne de droite.
 Ce dossier contient 
 
 - Presentations : la présentation montrée en introduction
-- Instructions : les instructions pour réaliser le hands on
-- elements : les fichiers nécessaires à chaque step
+- Instructions : les instructions pour réaliser le hands on. Pour chaque step vous avez deux répertoires initial et solution contenant les projets au début et à la fin du step.
 - logs : des fichiers de log à utiliser dans le projet
-- solutions : les projets lein finis pour chaque step
 
 Les chemins utilisés dans les instructions supposent que vous avez crée votre projet lein dans ce répertoire.
 
