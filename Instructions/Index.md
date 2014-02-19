@@ -17,8 +17,8 @@ Si vous avez Git vous pouvez cloner le repository
 </code></pre>
 
 
-Si vous n'avez pas git, vous pouvez aller sur [Repository](https://github.com/cfalguiere/Hands-On-Incanter/tree/master)
-utiliser le bouton "Download ZIP" dans la colonne de droite.
+Si vous n'avez pas git, vous pouvez aller sur le [Repository](https://github.com/cfalguiere/Hands-On-Incanter/tree/master)
+ et utiliser le bouton "Download ZIP" dans la colonne de droite.
 
 Ce dossier contient 
 
