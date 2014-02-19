@@ -91,7 +91,7 @@ Step 4 - Des charts améliorés
 Maintenant que nous avons des timestamps nous allons pouvoir afficher des séries chronologiques. Nous allons aussi voir comment configurer les charts.
 
 Vous trouverez les instructions dans 
-[Des charts améliorés](perf-charts.html)
+[Des charts améliorés](step4-perf-charts/perf-charts.html)
 
 Step 5 - Un summary amélioré
 -----------------------
