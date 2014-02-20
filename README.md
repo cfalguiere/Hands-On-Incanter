@@ -14,6 +14,7 @@ Learn
 - how to custimize JFreeChart charts and Java interop
 - currying 
 - parameter destructuring
+- reduce
 - collection manipulation
 - main with arguments
 
