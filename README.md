@@ -1,34 +1,20 @@
 Hands-On-Incanter
 =================
 
-Hands-On Incanter
+Materiel for Hands-on on IncanterR
 
-play with incanter
-setup a lein project
-read a sample csv file and compute some stats
-run as a script and view charts for a serie
+no konwledge of Incanter or Clojure is required
 
-real data file
-add a regex parser for time logs
-save pie chart
-save data into a csv file for future use
-configure delimiter
+Learn 
 
-improve result
-compute quantiles
-add number of readings above a value
-sort result by label
-save pie chart by time spent
+- IncanteR basics : dataset, $ functions, basic statistics 
+- Midje basics
+- how to parse a file and regex
+- how to manipulate dates with clj-time
+- how to custimize JFreeChart charts and Java interop
+- currying 
+- parameter destructuring
+- collection manipulation
+- main with arguments
 
-improve use 
-pass the file name as a parameter
-save histogram and time-series when a condition is met
-save data into an excel file
-
-
-improvements
-add another analysis : stats on errors
-add another analysis : get top 5 readings 
-limit time period
-add a switch to allow multiple analysis and parametrization
 
