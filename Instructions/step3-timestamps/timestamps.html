@@ -162,7 +162,7 @@ sup {
 
 <p>Le fichier contient des dates sous forme de chaîne. Dans IncanteR nous avons besoin de timestampss en millisecondes.</p>
 
-<p>Nous allons utilier clj-time qui est un wrapper sur Joda Time</p>
+<p>Nous allons utilier clj-time qui est une librairie de manipulation des dates. C'est un wrapper sur Joda Time</p>
 
 <p><a href="https://github.com/clj-time/clj-time">clj-time</a></p>
 
@@ -170,7 +170,11 @@ sup {
 
 <p><br></p>
 
-<p>Ajoutez [clj-time "0.6.0"] dans le projet.clj et dans le REPL importez clj-time.core, clj-time.format et clj-time.coerce. date-time vous permet de créer une date et to-long la convertie en long.</p>
+<p>Ajoutez [clj-time "0.6.0"] dans le projet.clj</p>
+
+<p>Dans le REPL importez clj-time.core, clj-time.format et clj-time.coerce.</p>
+
+<p>La fonction date-time vous permet de créer une date et to-long de la convertie en long.</p>
 
 <pre><code>user=> (use '(clj-time core coerce))
 user=> (def d (date-time 2013 12 19 8 0 1 004))
@@ -182,16 +186,14 @@ user=> (to-long d)
 </code></pre>
 
 
-<p>Le format de notre fichier est presque ISO 8601.</p>
+<p>Est ce que ça marche sur notre fichier. Malheureusement pas. le format est presque ISO 8601 mais pas tout à fait.</p>
 
 <pre><code>user=> (to-long "2013-12-19 08:00:01,004")
 nil
-user=> (to-long "2013-12-19T08:00:01,004")
-1387440001004
 </code></pre>
 
 
-
+<p>Il faut donc définir un formatteur spécifique et utiliser la fonction parse.</p>
 
 <pre><code>user=> (def custom-formatter (formatter "yyyy-MM-dd HH:mm:ss,SSS"))
 #'user/custom-formatter
@@ -204,7 +206,9 @@ user=> (parse custom-formatter "2013-12-19 08:00:01,004")
 
 <p><br></p>
 
-<p>Ajoutez le custom-formatter et codez la fonction str-to-ts sur le modèle de str-to-long. Cette fonction parse une chaîne contenant la date et calcule le timestamps en millisecondes.</p>
+<p>Revenons maintenant dans le code pour utiliser tout ça.</p>
+
+<p>Tout d'abord, ajoutez le custom-formatter et codez la fonction str-to-ts sur le modèle de str-to-long. Cette fonction parse une chaîne contenant la date et calcule le timestamps en millisecondes.</p>
 
 <p><br>
 <strong>-Solution-</strong></p>
@@ -217,7 +221,7 @@ user=> (parse custom-formatter "2013-12-19 08:00:01,004")
 </code></pre>
 
 
-<p>Modifiez les fonction mapper build-reading et readings-to-dataset pour ajouter une colonne ts qui contient le timestamp. Ajoutez également les tests correspondants.</p>
+<p>Modifiez les fonction existantes pour que le dataset ait maintenant 4 colonnes, la dernière est une colonne ts qui contient le timestamp. Ajoutez également les tests correspondants.</p>
 
 <p><br>
 <strong>-Solution-</strong></p>
@@ -236,7 +240,11 @@ user=> (parse custom-formatter "2013-12-19 08:00:01,004")
 </code></pre>
 
 
-<p>Une fois la fonction disponible vous pouvez visualiser vos données avec le timestamps et enfin le time-series-plot. Assurez vous que vous avez bien importé incanter.charts.</p>
+<p>Une fois ces fonctions disponibles vous pouvez visualiser vos données avec le timestamps et enfin le time-series-plot.</p>
+
+<p>Vous trouverez l'extrait du fichier utilisé pour les tests unitaires dans le répetoire resources et un fichier .log plus complet dans le répertoire logs.</p>
+
+<p>Assurez vous que vous avez bien importé incanter.charts.</p>
 
 <pre><code>user=> (view (load-dataset "resources/sample.log"))
 user=> (view (time-series-plot :ts :duration  :data (load-dataset "resources/sample.log")))

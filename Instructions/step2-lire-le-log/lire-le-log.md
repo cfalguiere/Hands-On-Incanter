@@ -3,23 +3,25 @@ Lire le log
 
 Si vous avez sauté les steps précédents vous pouvez trouver le projet initial de ce step dans Instructions/step2-lire-le-log/initial.
 
-Le log n'est pas en csv à l'origine. Nous allons écrire quelques fonctions qui lisent et parsent le log dans son format d'origine.
+Le log n'est pas en csv à l'origine. Nous allons écrire quelques fonctions qui lisent et parsent le log dans son format d'origine. Ensuite nous contruirons le dataset. 
+
+Un dataset s'utilise comme une sorte de table, mais il est en fait implémenté comme une map contenant d'une part les noms de colonnes, d'autre part une liste de vecteurs contenant chacun une ligne de données. La fonction dataset permet de construire un dataset à partir de ces deux types de données.
 
 1 - Parser une ligne 
 -----------------------
 <br>
+Nous allons d'abord nous occuper de parser une ligne du fichier. Le pattern d'extraction des données pour notre fichier vous est fourni dans la variable time-pattern.
 
-La fonction re-seq découpe une ligne en fonction du pattern. Appliquez cette fonction à la chaîne "12 ab" pour obtenir les deux chaînes "12" et "ab"
+La fonction re-seq découpe une ligne en fonction du pattern. 
+Pour vous familiariser avec les regex, appliquez cette fonction à la chaîne "12 ab" pour obtenir les deux chaînes "12" et "ab"
 
 <pre><code> user=> (re-seq #"(\d*) (.*)" "12 ab") 
 (["12 ab" "12" "ab"])
 </code></pre>
 
-Le pattern d'extraction des données pour notre fichier vous est fourni dans la variable time-pattern.
+Il y a trop de colonnes et les nombres ne sont pas du bon type. Vous allez devoir écrire la fonction build-reading qui prend la sortie du regexp avec le pattern time-pattern et renvoie un vecteur contenant la date, le nom du service et la durée en long. Le test est fourni.
 
-Nous aurons besoin de convertir la chaîne qui contient un nombre. Une fonction str-to-long vous est fournie. Essayez cette fonction sur la chaîne "12"
-
-Dans un premier temps vous allez devoir écrire la fonction build-reading qui prend la sortie du regexp avec le pattern time-pattern et renvoie un vector contenant la date, le nom du service et la durée en long. Le test est fourni.
+Nous aurons besoin de convertir la chaîne qui contient la durée en nombre. Une fonction str-to-long vous est fournie. Essayez cette fonction sur la chaîne "12"
 
 <br>
 **-Solution-**
@@ -31,7 +33,11 @@ Dans un premier temps vous allez devoir écrire la fonction build-reading qui pr
 
 Vous allez ensuite écrire la fonction parse-line. 
 
-Cette fonction doit d'abord appliquer re-seq sur la ligne, puis transformer le résultat avec la fonction build-reading. Pour faciliter le test la fonction de transformation est passée en paramèttre. Le test est fourni. Vous aurez besoin d'importer clojure.java.io.
+Cette fonction doit d'abord extraire les groupes avec re-seq. Ensuite nous alons contruire le vecteur dont nous avons besoin avec la fonction build-reading. 
+
+Pour faciliter le test la fonction de transformation (ici build-reading) est passée en paramèttre. Le test est fourni. 
+
+Vous aurez besoin d'importer clojure.java.io.
 
 <br>
 **-Solution-**
@@ -57,9 +63,15 @@ La fonction parse-file est fournie. Elle parcours le fichier et transmet chaque 
      (doall (map parser (line-seq rdr)))))
 </code></pre>
 
-Pour appeler la parse-file nous avons besoin d'une fonction "parser" qui prend la ligne du fichier en paramètre. 
+Pour appeler la parse-file nous avons besoin d'une fonction "parser" qui n'a qu'un paramètre la ligne du fichier à traiter. 
 
-Nous allons construire cette fonction en définissant une fonction partielle ou curry à partir de parse-line. Nous avons 2 paramètre à curryer. partial prend une fonction à n arguments et un paramètre et retourne une fonction à n-1 arguments.
+Nous allons construire cette fonction en appliquant la technique du currying (ou application partielle) à la fonction parse-line. 
+
+Le currying consiste à construire une fonction à n-1 arguments à partir d'une fonction à n arguments. Sous une forme plus technique, l'arité est diminuée de 1. Le premier argument de la fonction est fixé.
+ 
+En Clojure le currying se fait avec la fonction partial. 
+
+Nous avons curryer les deux premiers paramètres de parse-line pour obtenir une fonction a un seul paramètre.
 
 La fonction qui définie la fonction parser et lance la lecture du fichier s'appelle extract-data et le test est fourni.
 
@@ -79,7 +91,7 @@ La fonction qui définie la fonction parser et lance la lecture du fichier s'app
 <br>
 Il nous reste à construire un dataset avec les bons noms de colonnes à partir de la sequence obtenue à la lecture du fichier.
 
-Vous pouvez utiliser la fonction dataset et lui passer une liste de noms de colonnes et les données extraites du fichier.
+Nous allons construire une fonction qui construit le dataset à partir d'une liste de noms de colonnes et d'une séquence de vecteur représentant le timestamp, le nom du service et la durée.
 
 <br>
 **-Solution-**
@@ -92,7 +104,7 @@ Vous pouvez utiliser la fonction dataset et lui passer une liste de noms de colo
   (dataset [:timestamp :servicename :duration] readings))
 </code></pre>
 
-On peut maintenant extraire les données lues dans le fichier dans un dataset en combinant la fonction d'extraction des données extract-data  et la fonction de création de dataset readings-to-dataset.
+On peut maintenant combiner la fonction d'extraction des données extract-data  et la fonction de création de dataset readings-to-dataset pour charger les données dans un dataset.
 
 <br>
 **-Solution-**
