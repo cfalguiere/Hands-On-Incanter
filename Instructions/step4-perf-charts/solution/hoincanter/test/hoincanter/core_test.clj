@@ -41,7 +41,7 @@
 		)) => 42)
 
 (fact "it should return a dataset and duration of first line is 261"
-       ($ 0 :duration (convert-to-dataset "resources/sample.log")) => 261)
+       ($ 0 :duration (load-dataset "resources/sample.log")) => 261)
 
 ;; step 3
 

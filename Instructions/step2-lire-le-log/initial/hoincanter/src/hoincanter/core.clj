@@ -49,7 +49,7 @@
   {:pre [(seq? readings)] } 
   "TODO")
 
-(defn convert-to-dataset
+(defn load-dataset
   "get a dataset from the file"
   [filename]
   {:pre  [(string? filename)] } 

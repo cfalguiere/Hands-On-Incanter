@@ -240,16 +240,16 @@ Nous allons mapper la fonction de calcul d'une métrique sur le tableau de métr
 
 <pre><code>(defn compute-metric
   "compute a metric grouped by label"
-  [ds [metric-name f]]
-  {:pre [(and (dataset? ds) (keyword? metric-name) (function? f))] } 
+  [ds [metric-name metric-function]]
+  {:pre [(and (dataset? ds) (keyword? metric-name) (function? metric-function))] } 
   (col-names
-   ($rollup f :duration :servicename ds)
+   ($rollup metric-function :duration :servicename ds)
    [:servicename metric-name])) 
 
 (defn compute-metrics
   "compute metrics grouped by label"
   [metric-functions ds]
-  {:pre [(dataset? ds)] } 
+  {:pre  [(and (dataset? ds) (map? metric-functions))]  } 
   (map (partial compute-metric ds) metric-functions))
 </code></pre>
 
@@ -265,7 +265,7 @@ La fonction compute-metric attend maintenant un vecteur contenant la clé et la 
 
 <pre><code>user=> (use '(hoincanter core summary)
 user=> (use '(incanter core io stats))
-user=> (def ds (convert-to-dataset "resources/sample.log"))
+user=> (def ds (load-dataset "resources/sample.log"))
 user=> (def metrics-list  (compute-metrics {:count count, :mean mean} ds))
 </code></pre>
 
@@ -310,7 +310,21 @@ user=> (def metrics-list  (compute-metrics {:count count, :mean mean} ds))
 </code></pre>
 
 
-<p>Vous avez maintenant tous les éléments pour écrire la fonction compute-metrics-table.</p>
+<p>Vous avez maintenant tous les éléments pour écrire la fonction metrics-to-dataset.</p>
+
+<p><br>
+<strong>-Solution-</strong></p>
+
+<pre><code>(defn metrics-to-dataset
+  "compute metrics grouped by label"
+  [metric-functions metrics]
+  {:pre [(and  (seq? metrics)  (map? metric-functions))] } 
+  (let [cols (map #(sel % :cols 1) metrics)
+        service-names ($ :servicename (nth metrics 0))
+    metric-names (concat [:servicename] (keys metric-functions))]
+    (col-names (reduce conj-cols service-names cols) metric-names)))
+</code></pre>
+
 
 <h2>5 - Min, max et quantiles</h2>
 
@@ -335,7 +349,7 @@ Ajoutez les métriques min, max, quantiles 90% et 95%. Vous devez construire des
 
 
 <pre><code>(fact "it should return a dataset "
-      (let [ds (convert-to-dataset "resources/sample.log")
+      (let [ds (load-dataset "resources/sample.log")
         metric-ds (compute-metric ds [:min (partial q 0)]) ]
     (print  metric-ds)
     (round ($ :min ($where {:servicename "WS_1R_DetailAbonne"} metric-ds))) => 261))

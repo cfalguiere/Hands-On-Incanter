@@ -97,7 +97,7 @@ On peut maintenant extraire les données lues dans le fichier dans un dataset en
 <br>
 **-Solution-**
 
-<pre><code>(defn convert-to-dataset
+<pre><code>(defn load-dataset
   "get a dataset from the file"
   [filename]
   {:pre  [(string? filename)] } 
@@ -108,7 +108,7 @@ Vous pouvez maintenant ouvrir un REPL et lire un des fichiers .log fournis. Vous
 
 <pre><code>user=> (use 'hoincanter.core)
 user=> (use '(incanter io core charts stats))
-user=> (view (convert-to-dataset "resources/sample.log"))
+user=> (view (load-dataset "resources/sample.log"))
 user=> (view (histogram :duration :data (convert-to-dataset "resources/sample.log")))
 </code></pre>
 

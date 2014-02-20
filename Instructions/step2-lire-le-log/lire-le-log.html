@@ -264,7 +264,7 @@ Il nous reste à construire un dataset avec les bons noms de colonnes à partir 
 <p><br>
 <strong>-Solution-</strong></p>
 
-<pre><code>(defn convert-to-dataset
+<pre><code>(defn load-dataset
   "get a dataset from the file"
   [filename]
   {:pre  [(string? filename)] } 
@@ -276,7 +276,7 @@ Il nous reste à construire un dataset avec les bons noms de colonnes à partir 
 
 <pre><code>user=> (use 'hoincanter.core)
 user=> (use '(incanter io core charts stats))
-user=> (view (convert-to-dataset "resources/sample.log"))
+user=> (view (load-dataset "resources/sample.log"))
 user=> (view (histogram :duration :data (convert-to-dataset "resources/sample.log")))
 </code></pre>
 

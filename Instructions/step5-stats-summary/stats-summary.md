@@ -100,7 +100,7 @@ Allez dans un REPL et étudiez la structure des données.
 
 <pre><code>user=> (use '(hoincanter core summary)
 user=> (use '(incanter core io stats))
-user=> (def ds (convert-to-dataset "resources/sample.log"))
+user=> (def ds (load-dataset "resources/sample.log"))
 user=> (def metrics-list  (compute-metrics {:count count, :mean mean} ds))
 </code></pre>
 
@@ -178,7 +178,7 @@ Dupliquez le test de compute-metric et testez avec la fonction min puis adaptez 
 </code></pre>
 
 <pre><code>(fact "it should return a dataset "
-      (let [ds (convert-to-dataset "resources/sample.log")
+      (let [ds (load-dataset "resources/sample.log")
 	    metric-ds (compute-metric ds [:min (partial q 0)]) ]
 	(print  metric-ds)
 	(round ($ :min ($where {:servicename "WS_1R_DetailAbonne"} metric-ds))) => 261))

@@ -30,7 +30,7 @@ Le main s'execute avec
   "compute and save response time statistics"
   [filename]
   {:pre  [(string? filename)] } 
-  (let [ data-ds (convert-to-dataset "resources/sample.log")
+  (let [ data-ds (load-dataset "resources/sample.log")
 	 metrics (compute-metrics metric-functions data-ds) 
 	 metrics-ds (metrics-to-dataset metric-functions metrics) ]
     (print metrics-ds)

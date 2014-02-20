@@ -74,12 +74,12 @@ Modifiez les fonction mapper build-reading et readings-to-dataset pour ajouter u
 
 Une fois la fonction disponible vous pouvez visualiser vos données avec le timestamps et enfin le time-series-plot. Assurez vous que vous avez bien importé incanter.charts.
 
-<pre><code>user=> (view (convert-to-dataset "resources/sample.log"))
-user=> (view (time-series-plot :ts :duration  :data (convert-to-dataset "resources/sample.log")))
+<pre><code>user=> (view (load-dataset "resources/sample.log"))
+user=> (view (time-series-plot :ts :duration  :data (load-dataset "resources/sample.log")))
 </code></pre>
 
 C'est un peu plus intéressant avec plus de données.
 
-<pre><code>user=> (view (convert-to-dataset "../logs/TIME_MONITOR_2013-12-20.log"))
+<pre><code>user=> (view (load-dataset "../logs/TIME_MONITOR_2013-12-20.log"))
 </code></pre>
 

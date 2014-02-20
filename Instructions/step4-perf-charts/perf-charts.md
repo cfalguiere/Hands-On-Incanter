@@ -18,7 +18,7 @@ Ensuite depuis le REPL, essayez chacune des fonctions sur les relevés dont le t
 <br>
 **-Solution-**
 <pre><code>user=> (use '(hoincanter core charts)
-user=> (def ds (convert-to-dataset "../logs/TIME_MONITOR_2013-12-20.log"))
+user=> (def ds (load-dataset "../logs/TIME_MONITOR_2013-12-20.log"))
 user=> (def dslong  ($where {:duration {:gt 40}} ds))
 user=> (view (perf-histogram dslong))
 </code></pre>
