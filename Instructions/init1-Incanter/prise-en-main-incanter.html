@@ -155,29 +155,27 @@ sup {
 <title>Prise en main d'Incanter
 ===============
 
-Incanter lit nativement les fichiers .csv.
-
-Dans un premier temps nous</title>
+IncanteR peut s'utiliser dans le REPL comme un DSL. Dans un</title>
 
 </head>
 <body>
 <h1>Prise en main d'Incanter</h1>
 
-<p>Incanter lit nativement les fichiers .csv.</p>
+<p>IncanteR peut s'utiliser dans le REPL comme un DSL. Dans un premier temps nous allons explorer nos données interactivement.</p>
 
-<p>Dans un premier temps nous allons supposer que vous avez transformé le fichier de log texte en un fichier .csv avec un autre outil.</p>
+<p>IncanteR lit nativement les fichiers .csv. Les fichier de log est en texte. Dans un premier temps nous allons supposer que vous avez transformé le fichier de log texte en un fichier .csv avec un autre outil.</p>
 
-<p>Ces fichiers apparaissent sous le nom TIME_MONITOR_<DATE>.csv dans le répertoire logs.</p>
-
-<p>Vous allez lire ce fichier et faire quelques analyses sur vos données avec Incanter en REPL.</p>
+<p>Les fichiers de log en csv apparaissent sous le nom TIME_MONITOR_<DATE>.csv dans le répertoire logs.</p>
 
 <h2>1 - Installation d'IncanteR</h2>
 
 <p><br></p>
 
-<p>Commencez par créer un projet leiningen</p>
+<p>Commencez par créer un projet leiningen et allez dans le répertoire créé. Il nous permettra de déclarer la dépendance Incanter et nous en aurons besoin plus tard.</p>
 
-<pre><code>$ leiningen new nom-projet</code></pre>
+<pre><code>$ leiningen new hoincanter
+$ cd hoincanter
+</code></pre>
 
 
 <p>Editez le project.clj pour ajouter la librairie Incanter [incanter "1.5.4"] dans les :dependancies</p>
@@ -195,9 +193,9 @@ Dans un premier temps nous</title>
 
 <p><br></p>
 
-<p>Copiez des fichiers CSV dans le répertoire du projet pour qu'il soit accessible plus facilement</p>
+<p>Copiez un fichier CSV dans le répertoire du projet pour qu'il soit accessible plus facilement.</p>
 
-<pre><code>$ cp logs/TIME_MONITOR_2013-12-18.csv hoincanter/</code></pre>
+<pre><code>$ cp ../logs/TIME_MONITOR_2013-12-20.csv .</code></pre>
 
 
 <p>Ouvrez un REPL</p>
@@ -212,7 +210,7 @@ Dans un premier temps nous</title>
 
 <p>Chargez le fichier CSV</p>
 
-<pre><code>user=> (def ds (read-dataset  "TIME_MONITOR_2013-12-18.csv" :header true :delim \;) )</code></pre>
+<pre><code>user=> (def ds (read-dataset  "TIME_MONITOR_2013-12-20.csv" :header true :delim \;) )</code></pre>
 
 
 <h2>3 - Quelques statistiques</h2>
@@ -229,6 +227,16 @@ user=> (summary ds)
 
 <p>Sélectionnez la colonne des temps de réponse (duration) et calculez sa moyenne, son écart type, son maximum et le quantile 95%</p>
 
+<p>Il n'y a aps de min et max. Les deux sont obtenus par les quantiles.</p>
+
+<p>Les quantiles d'un échantillon statistique sont des valeurs remarquables permettant de diviser le jeu de ces données ordonnées (en général triées) en intervalles consécutifs contenant le même nombre de données (source Wikipedia).</p>
+
+<p>Un cas particulier est la médiane ou quantile 50% qui est la valeur qui divise l'échantillon en 2. Un relevé à une probabilité de 50% d'être en dessous de cette valeur.</p>
+
+<p>On peut aussi considérer que c'est la valeur maximale qu'atteignent 50% des relevés. Dans les SLA on est souvent intéressé par des probabilités de 90% ou 95%.</p>
+
+<p>Aux limites, le maximum est la valeur maximale qu'atteignent 100% des relevés et le minimum est la valeur maximale attiente par 0% des relevés.</p>
+
 <pre><code>user=> (view ($ :duration ds))
 user=> (mean ($ :duration ds))
 user=> (sd ($ :duration ds))
@@ -239,14 +247,14 @@ user=> (quantile ($ :duration ds) :probs[0.95])
 
 <p>Pour faciliter l'écriture des quantiles, nous allons écrire une fonction utilitaire q qui prend deux paramètres, le seuil de probabilité et la série. Vérifiez ensuite que la fonction est correcte en calculant le maximum.</p>
 
-<pre><code> user=> (defn q [p serie] (quantile serie :probs [p]))
+<pre><code>user=> (defn q [p serie] (quantile serie :probs [p]))
 user=> (q 1 ($ :duration ds))
 </code></pre>
 
 
 <p>Lorsque vous avez plusieurs agrégats à calculer, pouvez alléger l'écriture en utilisant with-data. Construisez un vecteur contenant le nombre, la moyenne, l'écart-type, le minimum, le maximum, et le quantile 95% de la colonne duration.</p>
 
-<pre><code> user=> (with-data ($ :duration ds)
+<pre><code>user=> (with-data ($ :duration ds)
   #_=> [ (count $data) (mean $data) (sd $data) (q 0 $data) (q 1 $data) (q 0.95 $data) ] )
 </code></pre>
 
@@ -262,7 +270,7 @@ user=> (q 1 ($ :duration ds))
 <p>Vous pouvez utiliser $where. Le langage de requêtes est le même que celui de MongoDB [Langage de requêtes]
 (http://docs.mongodb.org/manual/tutorial/query-documents/)</p>
 
-<pre><code> user=> (def dslong  ($where {:duration {:gt 40}} ds))
+<pre><code>user=> (def dslong  ($where {:duration {:gt 40}} ds))
 </code></pre>
 
 
@@ -272,40 +280,46 @@ user=> (q 1 ($ :duration ds))
 
 <p>Summary vous permet de voir les différentes valeurs de services. Nous pouvons filtrer sur un service et calculer la moyenne des temps par exemple</p>
 
-<pre><code> user=> (mean  ($ :duration  ($where {:servicename "RS_OW_AgencyDataSupplierService"} dslong)))
+<pre><code>user=> (mean  ($ :duration  ($where {:servicename "RS_OW_AgencyDataSupplierService"} dslong)))
 1556.1666666666667
 </code></pre>
 
 
 <p></p>
 
-<p>Il y a un moyen plus facile de les obtenir par $group-by. Cette fonction créer une map de dataset. Une entrée est crée pour chaque valeur de la clé et elle contient les valeurs filtrées sur cette valeur.</p>
+<p>Il y a un moyen plus facile de les obtenir par $group-by sur une colonne.</p>
 
-<p>Essayez $group-by sur dslong. C'est une map donc vous pouvez utiliser keys pour avoir seulement la liste des valeurs de la catégorie et</p>
+<p>Une entrée est crée pour chaque valeur distincte de la colonne et elle contient la partie du dataset qui correspond.</p>
 
-<pre><code> ($group-by :servicename dslong)
+<p>Cette fonction crée une map de datasets.</p>
+
+<p>Essayez $group-by par :servicename sur dslong.</p>
+
+<pre><code>user=> ($group-by :servicename dslong)
 </code></pre>
 
 
 <p></p>
 
-<p>Vous pouvez obtenir le dataset correspondant à une valeur de servicename et l'utiliser pour calculer des statistiques</p>
+<p>Vous pouvez ainsi obtenir le dataset correspondant à service particulier. et l'utiliser pour calculer des statistiques</p>
 
-<pre><code> user=> (def dslongADS (get  ($group-by :servicename dslong) {:servicename "RS_OW_AgencyDataSupplierService"} ))
+<pre><code>user=> (def dslongADS (get  ($group-by :servicename dslong) {:servicename "RS_OW_AgencyDataSupplierService"} ))
 </code></pre>
 
 
 <p></p>
 
-<pre><code> user=> (mean  ($ :duration  dslongADS ))
+<pre><code>user=> (mean  ($ :duration  dslongADS ))
 </code></pre>
 
 
 <p></p>
 
-<p>Pour finir, nous allons afficher la moyenne  des temps de réponse pour chaque service. La fonction $rollup fait un $group-by et applique une fonction sur chaque groupe. Certains agrégats (mean, count …) ont un racourci syntaxique.</p>
+<p>Pour finir, nous allons afficher la moyenne  des temps de réponse pour chaque service.</p>
 
-<pre><code> user=> ($rollup mean :duration :servicename ds20)
+<p>La fonction $rollup fait un $group-by et applique une fonction sur chaque groupe. Certains agrégats (mean, count …) ont un racourci syntaxique.</p>
+
+<pre><code>user=> ($rollup mean :duration :servicename dslong)
 </code></pre>
 
 
@@ -315,9 +329,9 @@ user=> (q 1 ($ :duration ds))
 
 <p>Pour le moment, nous ne pouvons pas afficher les données sous une forme chronologique car la date n'a pas un format connu.</p>
 
-<p>Nous pouvons cependant afficher l'histogramme des temps de réponse.</p>
+<p>Nous pouvons cependant afficher l'histogramme des temps de réponse. L'histogramme affiche les quantiles et permet de voir la distribution des temps de réponse.</p>
 
-<pre><code> user=> (histogram  :duration :data ds20)
+<pre><code>user=> (histogram  :duration :data dslong)
 </code></pre>
 
 
@@ -325,7 +339,7 @@ user=> (q 1 ($ :duration ds))
 
 <p>Le diagramme est bien crée mais il faut utiliser view pour l'afficher.</p>
 
-<pre><code> user=> (view (histogram  :duration :data ds20))
+<pre><code>user=> (view (histogram  :duration :data dslong))
 </code></pre>
 
 
@@ -335,14 +349,15 @@ user=> (q 1 ($ :duration ds))
 
 <p>Nous pouvons aussi afficher les relevés par catégorie sous forme de diagramme en barre ou de camembert.</p>
 
-<pre><code> user=> (view (bar-chart :servicename :duration :vertical false :data  ($rollup count :duration :servicename dslong)))
-user=> (view (pie-chart :servicename  :duration  :vertical false :data  ($rollup count :duration :servicename dslong)))
+<pre><code>user=> (view (bar-chart :servicename :duration :vertical false :data  ($rollup count :duration :servicename dslong)))
+
+user=> (view (pie-chart :servicename  :duration   :data  ($rollup count :duration :servicename dslong)))
 </code></pre>
 
 
 <p></p>
 
-<p>Pour faciliter l'usage, nous allons écrire une fonction qui parse le fichier d'origine qui n'est pas un csv et construit le dataset.</p>
+<p>Dans les steps suivants, nous allons écrire une fonction qui parse le fichier d'origine qui n'est pas un csv et construit le dataset.</p>
 
 <p>Nous allons aussi écrire une fonction qui fabrique une date correcte pour que l'on puisse visualiser la série temporelle.</p>
 

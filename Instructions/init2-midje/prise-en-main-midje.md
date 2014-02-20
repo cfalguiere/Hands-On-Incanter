@@ -15,7 +15,8 @@ Ouvrez le fichier profiles.clj qui se trouve dans le répertoire .lein dans votr
 </code></pre>
 
 Si vous tapez
-<pre><code>$ lein</code></pre> ous avez maintenant une tâche midje disponible.
+<pre><code>$ lein</code></pre> 
+vous avez maintenant une tâche midje disponible.
 
 2 - Ajout de Midje dans le projet
 --------------

@@ -5,7 +5,7 @@ Si vous avez sauté les steps précédents vous pouvez trouver le projet initial
 
 Ecrivez une fonction main.
 
-Cette fonction accepte un fichier en paramètre, le parse, calcule le tableau de statistiques et le sauve dans un fichier et sauve un des charts.
+Cette fonction accepte un nom de fichier en paramètre, le parse, calcule le tableau de statistiques et le sauve dans un fichier et sauve un des charts.
 
 Vous pouvez utiliser la fonction save sur les charts et les datasets.
 
@@ -19,7 +19,7 @@ Le main est dans le code. Vous devez coder la fonction appelée.
 
 N'oubliez pas d'ajouter le nom du module où se trouve le main au project.clj.
 
-Le main s'execute avec 
+Le main s'exécute avec 
 
 <pre><code>lein run resources/sample.log 
 </code></pre>
