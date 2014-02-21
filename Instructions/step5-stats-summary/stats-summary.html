@@ -1,0 +1,412 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+<style>
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+blockquote {
+    margin: 0;
+    padding: 0;
+}
+body {
+    font-family: "Helvetica Neue", Helvetica, "Hiragino Sans GB", Arial, sans-serif;
+    font-size: 13px;
+    line-height: 18px;
+    color: #737373;
+    background-color: white;
+    margin: 10px 13px 10px 13px;
+}
+table {
+	margin: 10px 0 15px 0;
+	border-collapse: collapse;
+}
+td,th {	
+	border: 1px solid #ddd;
+	padding: 3px 10px;
+}
+th {
+	padding: 5px 10px;	
+}
+
+a {
+    color: #0069d6;
+}
+a:hover {
+    color: #0050a3;
+    text-decoration: none;
+}
+a img {
+    border: none;
+}
+p {
+    margin-bottom: 9px;
+}
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    color: #404040;
+    line-height: 36px;
+}
+h1 {
+    margin-bottom: 18px;
+    font-size: 30px;
+}
+h2 {
+    font-size: 24px;
+}
+h3 {
+    font-size: 18px;
+}
+h4 {
+    font-size: 16px;
+}
+h5 {
+    font-size: 14px;
+}
+h6 {
+    font-size: 13px;
+}
+hr {
+    margin: 0 0 19px;
+    border: 0;
+    border-bottom: 1px solid #ccc;
+}
+blockquote {
+    padding: 13px 13px 21px 15px;
+    margin-bottom: 18px;
+    font-family:georgia,serif;
+    font-style: italic;
+}
+blockquote:before {
+    content:"\201C";
+    font-size:40px;
+    margin-left:-10px;
+    font-family:georgia,serif;
+    color:#eee;
+}
+blockquote p {
+    font-size: 14px;
+    font-weight: 300;
+    line-height: 18px;
+    margin-bottom: 0;
+    font-style: italic;
+}
+code, pre {
+    font-family: Monaco, Andale Mono, Courier New, monospace;
+}
+code {
+    background-color: #fee9cc;
+    color: rgba(0, 0, 0, 0.75);
+    padding: 1px 3px;
+    font-size: 12px;
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    border-radius: 3px;
+}
+pre {
+    display: block;
+    padding: 14px;
+    margin: 0 0 18px;
+    line-height: 16px;
+    font-size: 11px;
+    border: 1px solid #d9d9d9;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+}
+pre code {
+    background-color: #fff;
+    color:#737373;
+    font-size: 11px;
+    padding: 0;
+}
+sup {
+    font-size: 0.83em;
+    vertical-align: super;
+    line-height: 0;
+}
+* {
+	-webkit-print-color-adjust: exact;
+}
+@media screen and (min-width: 914px) {
+    body {
+        width: 854px;
+        margin:10px auto;
+    }
+}
+@media print {
+	body,code,pre code,h1,h2,h3,h4,h5,h6 {
+		color: black;
+	}
+	table, pre {
+		page-break-inside: avoid;
+	}
+}
+</style>
+<title>Un summary amélioré
+===============
+
+Si vous avez sauté les steps précédents vous pouvez trouver le projet</title>
+
+</head>
+<body>
+<h1>Un summary amélioré</h1>
+
+<p>Si vous avez sauté les steps précédents vous pouvez trouver le projet initial de ce step dans Instructions/step5-stats-summary/initial.</p>
+
+<p>La fonction summary d'IncanteR affiche un résumé assez basique. Nous allons construire un summary plus adapté à nos besoins.</p>
+
+<p>Le but est de constuire un tableau qui affiche les principales statistiques (nombre d'occurences, moyenne, écart-type, min …) pour chaque service. Ce tableau est construit sous la forme d'un dataset.</p>
+
+<h2>1 - Le module Summary</h2>
+
+<p><br></p>
+
+<p>Vous placerez ces fonctions dans un module summary. Vous allez commencer par déplacer la fonction q et son test dans ce module.</p>
+
+<h2>2 - Dataset pour une métrique</h2>
+
+<p><br></p>
+
+<p>Premier problème regrouper les données par nom de service et faire les calculs.</p>
+
+<p>$rollup permet d'utiliser une fonction de son choix. Par exemple</p>
+
+<pre><code>user=> ($rollup #(count %) :duration :servicename dslong)</code></pre>
+
+
+<p>qui utilise la fonction anonyme #(count %) est fonctionnellement équivalente à</p>
+
+<pre><code>user=> ($rollup count :duration :servicename dslong)</code></pre>
+
+
+<p>Mais cette fonction n'accepte que les fonctions qui retournent une valeur scalaire.</p>
+
+<p>Nous allons donc calculer un dataset avec $rollup pour chaque métrique puis nous les fusionnerons pour constituer le dataset summary.</p>
+
+<p>Implémentez la fonction compute-metric pour qu'elle retourne un dataset contenant les noms de service dans la colonne 1 et leur compte dans la colonne 2.</p>
+
+<p>Pour faciliter la fusion et le debug, le dataset d'une métrique aura comme nom de colonne le nom de la métrique.</p>
+
+<p>La fonction coll-names vous permettra de remplacer la liste des noms de colonnes du dataset.</p>
+
+<p>Faites d'abord un test sur la fonction count.</p>
+
+<p><br>
+<strong>-Solution-</strong></p>
+
+<pre><code>(defn compute-metric
+  "compute a metric grouped by label"
+  [ds metric-name f]
+  {:pre [(and (dataset? ds) (keyword? metric-name) (function? f))] } 
+  (col-names 
+      ($rollup f :duration :servicename ds)    
+      [:servicename metric-name])) </code></pre>
+
+
+<h2>3 - Application à l'ensemble des métriques</h2>
+
+<p><br>
+Le tableau associatif metric-functions liste les métriques que vous voulons calculer.</p>
+
+<pre><code>(def metric-functions {:count count :mean mean :sd sd})
+</pre>
+
+
+<p></code></p>
+
+<p>Nous allons mapper la fonction de calcul d'une métrique sur le tableau de métriques.</p>
+
+<pre><code>(map key  metric-functions)
+</code></pre>
+
+
+<p>La fonction map sur une map va passer un couple (clé, valeur) pour chaque entrée du tableau associatif. key retourne la clé.</p>
+
+<p>Un essai sur cette fonction simple montre que le résultat est une liste de chaînes. Avec compute-metric le résultat sera une liste de datasets.</p>
+
+<p>Vous devez adapter la fonction compute-metric pour qu'elle accepte un couple clé valeur au lieu de 2 paramètres.</p>
+
+<p>La solution la plus simple est de destructurer les paramètres de compute-metric.</p>
+
+<p>Déstructuring correspond à démonter. Nous allons utiliser une forme très simple de desctructuring.</p>
+
+<p>Nous allons indiquer dans la liste des paramètres que nous voulons recevoir la structure "démontée" en décrivant le vecteur. Les arguments seront accessibles directement.</p>
+
+<p>Vous pourrez trouver plus d'informations là
+<a href="http://blog.jayfields.com/2010/07/clojure-destructuring.html">Clojure: Destructuring</a></p>
+
+<p>La fonction compute-metric attend maintenant un vecteur contenant la clé et la valeurs qui sont extraits directement en raison de la déstructuration.</p>
+
+<p>Pensez à modifier la fonction et le test.</p>
+
+<p><br>
+<strong>-Solution-</strong></p>
+
+<pre><code>(defn compute-metric
+  "compute a metric grouped by label"
+  [ds [metric-name metric-function]]
+  {:pre [(and (dataset? ds) (keyword? metric-name) (function? metric-function))] } 
+  (col-names
+   ($rollup metric-function :duration :servicename ds)
+   [:servicename metric-name])) 
+
+d'utiliser une fonction curry et 
+</code></pre>
+
+
+<p>Il nous reste un problème. La fonction compute-metric utilise deux paramètres. Le premier est le dataset qui sera le même pour toutes les métriques.</p>
+
+<p>Comment pouvons nous faire ?</p>
+
+<p><br>
+<strong>-Solution-</strong></p>
+
+<p>Nous avons déjà utilisé le currying.</p>
+
+<p>Une fois curriée la fonction compute-metric n'attend plus qu'un paramètre qui est passé automatiquement.</p>
+
+<p>(defn compute-metrics
+  "compute metrics grouped by label"
+  [metric-functions ds]
+  {:pre  [(and (dataset? ds) (map? metric-functions))]  }
+  (map (partial compute-metric ds) metric-functions))
+</code></pre></p>
+
+<h2>4 - Fusion des colonnes </h2>
+
+<p><br></p>
+
+<p>Maintenant que nous avons une liste de datasets, nous allons les fusionner.</p>
+
+<p>Allez dans un REPL et étudiez la structure des données.</p>
+
+<pre><code>user=> (use '(hoincanter core summary)
+user=> (use '(incanter core io stats))
+user=> (def ds (load-dataset "resources/sample.log"))
+user=> (def metrics-list  (compute-metrics {:count count, :mean mean} ds))
+</code></pre>
+
+
+<p>La fonction sel vous permet de lire la colonne 1 du dataset qui contient la métrique quelque soit son nom.</p>
+
+<pre><code>user=> (sel (nth metrics-list 0) :cols 1)
+</code></pre>
+
+
+<p>Si on construit une fonction anonyme à partir de de sel et on mappe cette fonction sur la liste des datasets des métriques, on obtient une liste des colonnes metriques.</p>
+
+<pre><code>user=> (def cols (map #(sel % :cols 1) metrics-list))
+</code></pre>
+
+
+<p>Cela va nous servir pour reconstruire un dataset.</p>
+
+<p>Il nous faut aussi des noms de colonnes. Vous pouvez obtenir la liste des noms de services dans le premier dataset</p>
+
+<pre><code>user=> (def services ($ :servicename (nth metrics-list 0)))
+</code></pre>
+
+
+<p>L'assemblage de la liste des noms de services et de la liste des colonnes vous donnera un dataset dont les colonnes sont le nom de service suivi de chacune des métriques</p>
+
+<p>La fonction conj-cols d'Incanter permet de fusionner les colonnes. Mais l'application à une liste et une liste de liste ne donne pas le résultat attendu.</p>
+
+<p>Est ce que vous voyez pourquoi ?</p>
+
+<p><br>
+<strong>-Solution-</strong>
+conj-col essaye de joidre une colonne qui contient des noms de service avec ce qu'il prend pour un dataset. Il construit un dataset à partir de la liste en considérant que c'est une liste de lignes</p>
+
+<p>Nous allons donc utiliser reduce pour ajouter les colonnes une à une. L'accumulation est initialisée par la liste des noms de services. Ensuite conj-cols est appliqué sur un dataset et une colonne.</p>
+
+<p><br>
+<strong>-Solution-</strong></p>
+
+<pre><code>user=> (reduce conj-cols services cols)
+</code></pre>
+
+
+<p>Il ne reste plus qu'à ajouter les noms de colonnes du dataset.</p>
+
+<p><br>
+<strong>-Solution-</strong></p>
+
+<pre><code>user=> (col-names (reduce conj-cols services cols) '(:servicename :count :mean))
+</code></pre>
+
+
+<p>La liste des labels de colonne dépend de la liste des métriques. Vous pouvez utiliser keys pour extraire la liste des clés de la map metric-functions et concat pour les rassembler en une seule liste avec le nom de la colonne :servicename.</p>
+
+<p><br>
+<strong>-Solution-</strong></p>
+
+<pre><code>user=> (concat [:servicename] (keys metric-functions))
+</code></pre>
+
+
+<p>Vous avez maintenant tous les éléments pour écrire la fonction metrics-to-dataset.</p>
+
+<p><br>
+<strong>-Solution-</strong></p>
+
+<pre><code>(defn metrics-to-dataset
+  "compute metrics grouped by label"
+  [metric-functions metrics]
+  {:pre [(and  (seq? metrics)  (map? metric-functions))] } 
+  (let [cols (map #(sel % :cols 1) metrics)
+        service-names ($ :servicename (nth metrics 0))
+    metric-names (concat [:servicename] (keys metric-functions))]
+    (col-names (reduce conj-cols service-names cols) metric-names)))
+</code></pre>
+
+
+<h2>5 - Min, max et quantiles</h2>
+
+<p><br></p>
+
+<p>La liste de métriques fournies se limite à des fonctions simples à appeler.</p>
+
+<p>Nous voulons aussi les métriques min, max, quantiles 90% et 95%.</p>
+
+<p>Vous devez ajouter ces fonctions  dans la map  metric-functions. Mais comment faire pour passer les paramètres ?</p>
+
+<p>Dupliquez le test de compute-metric et testez avec la fonction min. Ce test défini sa propre liste de métriques.</p>
+
+<p>Ensuite adaptez la map metric-functions.</p>
+
+<p><br>
+<strong>-Solution-</strong></p>
+
+<pre><code>user=>(def metric-functions {
+  :count count 
+  :mean mean :sd sd
+  :min (partial q 0) 
+  :q90 (partial q 0.90)
+  :q95 (partial q 0.95) 
+  :max (partial q 1)})
+</code></pre>
+
+
+
+
+<pre><code>(fact "it should return a dataset "
+      (let [ds (load-dataset "resources/sample.log")
+        metric-ds (compute-metric ds [:min (partial q 0)]) ]
+    (print  metric-ds)
+    (round ($ :min ($where {:servicename "WS_1R_DetailAbonne"} metric-ds))) => 261))
+</code></pre>
+
+
+
+</body>
+</html>

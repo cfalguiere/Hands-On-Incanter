@@ -1,0 +1,231 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+<style>
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+blockquote {
+    margin: 0;
+    padding: 0;
+}
+body {
+    font-family: "Helvetica Neue", Helvetica, "Hiragino Sans GB", Arial, sans-serif;
+    font-size: 13px;
+    line-height: 18px;
+    color: #737373;
+    background-color: white;
+    margin: 10px 13px 10px 13px;
+}
+table {
+	margin: 10px 0 15px 0;
+	border-collapse: collapse;
+}
+td,th {	
+	border: 1px solid #ddd;
+	padding: 3px 10px;
+}
+th {
+	padding: 5px 10px;	
+}
+
+a {
+    color: #0069d6;
+}
+a:hover {
+    color: #0050a3;
+    text-decoration: none;
+}
+a img {
+    border: none;
+}
+p {
+    margin-bottom: 9px;
+}
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    color: #404040;
+    line-height: 36px;
+}
+h1 {
+    margin-bottom: 18px;
+    font-size: 30px;
+}
+h2 {
+    font-size: 24px;
+}
+h3 {
+    font-size: 18px;
+}
+h4 {
+    font-size: 16px;
+}
+h5 {
+    font-size: 14px;
+}
+h6 {
+    font-size: 13px;
+}
+hr {
+    margin: 0 0 19px;
+    border: 0;
+    border-bottom: 1px solid #ccc;
+}
+blockquote {
+    padding: 13px 13px 21px 15px;
+    margin-bottom: 18px;
+    font-family:georgia,serif;
+    font-style: italic;
+}
+blockquote:before {
+    content:"\201C";
+    font-size:40px;
+    margin-left:-10px;
+    font-family:georgia,serif;
+    color:#eee;
+}
+blockquote p {
+    font-size: 14px;
+    font-weight: 300;
+    line-height: 18px;
+    margin-bottom: 0;
+    font-style: italic;
+}
+code, pre {
+    font-family: Monaco, Andale Mono, Courier New, monospace;
+}
+code {
+    background-color: #fee9cc;
+    color: rgba(0, 0, 0, 0.75);
+    padding: 1px 3px;
+    font-size: 12px;
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    border-radius: 3px;
+}
+pre {
+    display: block;
+    padding: 14px;
+    margin: 0 0 18px;
+    line-height: 16px;
+    font-size: 11px;
+    border: 1px solid #d9d9d9;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+}
+pre code {
+    background-color: #fff;
+    color:#737373;
+    font-size: 11px;
+    padding: 0;
+}
+sup {
+    font-size: 0.83em;
+    vertical-align: super;
+    line-height: 0;
+}
+* {
+	-webkit-print-color-adjust: exact;
+}
+@media screen and (min-width: 914px) {
+    body {
+        width: 854px;
+        margin:10px auto;
+    }
+}
+@media print {
+	body,code,pre code,h1,h2,h3,h4,h5,h6 {
+		color: black;
+	}
+	table, pre {
+		page-break-inside: avoid;
+	}
+}
+</style>
+<title>Des charts améliorés
+===========
+
+Si vous avez sauté les steps précédents vous pouvez trouver le projet</title>
+
+</head>
+<body>
+<h1>Des charts améliorés</h1>
+
+<p>Si vous avez sauté les steps précédents vous pouvez trouver le projet initial de ce step dans Instructions/step4-perf-charts/initial.</p>
+
+<p>Maintenant que nous avons des timestamps nous allons pouvoir afficher des séries chronologiques. Nous allons aussi voir comment adapter les charts à nos goûts et nos besoin.</p>
+
+<h2>1 - Compréhension du code fourni</h2>
+
+<p><br>
+Un ensemble de fonctions de chart avec un paramétrage des titres, des couleurs vous sont fournies dans Instructions/step4-perf-charts/perf-charts.txt.</p>
+
+<p>Placez ces fonctions dans un module charts dans le projet hoincanter. Vous devrez créer un fichier charts.clj dans src.</p>
+
+<p>Pour commencer, expliquez à quoi sert doto. Essayez de réécrire count-bar-chart sans le doto.</p>
+
+<p>Et tant que nous y sommes, pourquoi certaines fonctions commencent par . ou finissent par . ?</p>
+
+<p><strong>-Solution-</strong></p>
+
+<p>Les charts s'appuient sur JFreeChart. Une partie est wrappée, pour une autre il faut s'en remettre à l'interop.</p>
+
+<p>Certaines couleurs sont fournies par exemple java.awt.Color/red. Pour spécifier d'autres couleurs, il faut créer un objet couleur.  java.awt.Color. appele le constructeur de la classe Java Color pour construire un objet Color. Le point en dernière position est un constructeur.</p>
+
+<p>De même les modifications courantes, ajouter une série, changer la couleur ou l'épaisseur sont wrappées. Mais pour l'histogramme, la modification d'apparence requirt l'accès au renderer.
+histogram crée un objet JFreeChart sur lequel nous pouvons obtenir le renderer et le manipuler par les méthodes de renderer. .setPaint, .getPlot, .getRenderer sont des appels de méthodes sur les objets Java correspondants.</p>
+
+<p>doto permet de chaîner des fonctions alors qu'elles sont présentées successivement. La sortie du premier argument est passé en entrée du deuxième, etc.</p>
+
+<p>C'est très utilisé pour les wrappers sur les builders Java où l'on a une structure de type chart.setAttr1(x).setAttr2(y)) qui devrait s'écrire en Clojure (setAtt2 (setAttr1 (chart) x ) y).</p>
+
+<p>Sans le doto, le code ressemblerait à ça</p>
+
+<pre><code>(set-stroke-color      
+      (bar-chart factor :t :vertical false
+         :title (str "Count by " (name factor))
+         :x-label (name factor)
+         :y-label nil
+         :data  ($rollup count :t factor ds))
+      (java.awt.Color. 121 209 24) :series 0)
+</code></pre>
+
+
+<p></p>
+
+<h2>2 - Adaptation des charts customisés</h2>
+
+<p>Adaptez les fonctions car la source n'a pas les mêmes noms de colonnes et traduisez les titres en français.</p>
+
+<p>Vous aurez besoin du module incanter.charts et d'autres modules d'incanter.</p>
+
+<p>3 - Tests manuels</p>
+
+<p>Ce type de fonction est difficile à tester en test unitaire car les images sont différentes à chaque run. On peut tout au plus faire un test électrique pour vérifier que les objets JFreeChart sont bien créés.</p>
+
+<p>Depuis le REPL, essayez chacune des fonctions sur les relevés dont le temps est supérieur à 40 ms.</p>
+
+<p><br>
+<strong>-Solution-</strong></p>
+
+<pre><code>user=> (use '(hoincanter core charts)
+user=> (use '(incanter core charts))
+user=> (def ds (load-dataset "../logs/TIME_MONITOR_2013-12-20.log"))
+user=> (def dslong  ($where {:duration {:gt 40}} ds))
+user=> (view (perf-histogram dslong))
+</code></pre>
+
+
+
+</body>
+</html>
